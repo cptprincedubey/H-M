@@ -36,16 +36,40 @@ const registerSellerController = async (req, res) => {
       }
     );
 
-    res.cookie("sellerToken", sellerToken);
+    res.cookie("sellerToken", sellerToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 3600000, // 1 hour
+    });
 
     return res.status(201).json({
       message: "Seller registered",
       seller: newSeller,
+      token: sellerToken,
     });
   } catch (error) {
     console.log("error in seller register api->", error);
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        message: messages.join(', '),
+      });
+    }
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        message: `${field} already exists`,
+      });
+    }
+    
     return res.status(500).json({
       message: "internal server error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
@@ -61,16 +85,32 @@ const sellerLoginController = async (req, res) => {
         message: "Seller not found",
       });
 
-    let cp = seller.comparePass(password);
+    let cp = await seller.comparePass(password);
 
     if (!cp)
       return res.status(400).json({
         message: "Invalid credentials",
       });
 
+    let sellerToken = jwt.sign(
+      { seller_id: seller._id },
+      process.env.JWT_SELLER_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    res.cookie("sellerToken", sellerToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 3600000, // 1 hour
+    });
+
     return res.status(200).json({
       message: "Seller logged in",
       seller: seller,
+      token: sellerToken,
     });
   } catch (error) {
     console.log("error in seller login", error);

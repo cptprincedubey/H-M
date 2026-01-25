@@ -6,11 +6,15 @@ const {
   updateProductDataController,
   deleteProductController,
 } = require("../controllers/product.controller");
+const { searchProductsController } = require("../controllers/search.controller");
 const sellerMiddleware = require("../middlewares/seller.middleware");
 
 const router = express.Router();
 
-router.post("/create", upload.array("images", 5), createProductController);
+// Search route (must be before /:category route)
+router.get("/search", searchProductsController);
+
+router.post("/create", sellerMiddleware, upload.array("images", 5), createProductController);
 
 router.get("/:category", getAllProductsDataController);
 router.put(

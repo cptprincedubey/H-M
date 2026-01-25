@@ -1,12 +1,10 @@
 const express = require("express");
-const { route } = require("./product.routes");
 const {
   registerSellerController,
   sellerLoginController,
   getSellerProfileController,
 } = require("../controllers/seller.Auth.controller");
 const sellerMiddleware = require("../middlewares/seller.middleware");
-const { message } = require("../validator/user.validation");
 
 const router = express.Router();
 

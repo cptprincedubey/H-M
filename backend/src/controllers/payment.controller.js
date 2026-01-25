@@ -1,4 +1,3 @@
-const { message } = require("../validator/user.validation");
 const razorpayInstance = require("../config/razorpay");
 const ProductModel = require("../models/product.model");
 

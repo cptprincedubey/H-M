@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const { type } = require("../validator/user.validation");
-const { string } = require("joi");
 
 const productSchema = new mongoose.Schema(
   {
@@ -21,7 +19,7 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["ladies, men, kids, beauty, home"],
+      enum: ["ladies", "men", "kids", "beauty", "home"],
     },
     description: {
       type: String,
@@ -35,7 +33,6 @@ const productSchema = new mongoose.Schema(
       {
         type: String,
         enum: ["s", "m", "l", "xl", "xxl"],
-        default: ["m"],
       },
     ],
     colors: [

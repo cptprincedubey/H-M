@@ -25,17 +25,40 @@ const registerController = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 3600000, // 1 hour
+    });
 
     return res.status(201).json({
       message: "user registered",
       user: newUser,
+      token: token,
     });
   } catch (error) {
     console.log("error in reg->", error);
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        message: messages.join(', '),
+      });
+    }
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        message: `${field} already exists`,
+      });
+    }
+    
     return res.status(500).json({
       message: "internal server error",
-      error: error,
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
@@ -56,7 +79,7 @@ const loginController = async (req, res) => {
         message: "User not found",
       });
 
-    let cp = user.comparePass(password);
+    let cp = await user.comparePass(password);
 
     if (!cp)
       return res.status(400).json({
@@ -67,11 +90,17 @@ const loginController = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 3600000, // 1 hour
+    });
 
     return res.status(200).json({
       message: "User logged in",
       user: user,
+      token: token,
     });
   } catch (error) {
     console.log("error in login->", error);

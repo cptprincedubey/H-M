@@ -3,9 +3,9 @@ const sendFiles = require("../services/storage.services");
 
 const createProductController = async (req, res) => {
   try {
-    let seller_id = req.seller;
+    let seller_id = req.seller._id;
 
-    if (!req.files)
+    if (!req.files || req.files.length === 0)
       return res.status(422).json({
         message: "Images is required",
       });
@@ -34,26 +34,33 @@ const createProductController = async (req, res) => {
         message: "All fields are required",
       });
 
+    // Convert size and color to arrays if they're strings
+    const sizesArray = Array.isArray(size) ? size : size.split(',').map(s => s.trim());
+    const colorsArray = Array.isArray(color) ? color : color.split(',').map(c => c.trim());
+
     let newProduct = await ProductModel.create({
       productName,
       price: {
-        amount,
+        amount: Number(amount),
         currency,
       },
       category,
       description,
-      colors: color,
-      sizes: size,
+      colors: colorsArray,
+      sizes: sizesArray,
       images: uploadedImgs.map((val) => val.url),
+      seller_id: seller_id,
     });
 
     return res.status(201).json({
       message: "Product created",
+      product: newProduct,
     });
   } catch (error) {
     console.log("error in create order api->", error);
     return res.status(500).json({
       message: "internal server error",
+      error: error.message,
     });
   }
 };
@@ -62,21 +69,24 @@ const getAllProductsDataController = async (req, res) => {
   try {
     let category = req.params.category;
 
+    if (!category) {
+      return res.status(400).json({
+        message: "Category is required",
+      });
+    }
+
     let products = await ProductModel.find({ category });
 
-    if (!products)
-      return res.status(404).json({
-        message: "No products found",
-      });
-
+    // Return empty array instead of 404 for better UX
     return res.status(200).json({
-      productsData: products,
-      message: "Product fetched",
+      productsData: products || [],
+      message: products && products.length > 0 ? "Products fetched" : "No products found",
     });
   } catch (error) {
     console.log("error in get product api->", error);
     return res.status(500).json({
       message: "internal server error",
+      error: error.message,
     });
   }
 };
@@ -84,36 +94,58 @@ const getAllProductsDataController = async (req, res) => {
 const updateProductDataController = async (req, res) => {
   try {
     let product_id = req.params.id;
+    let seller_id = req.seller._id;
 
     if (!product_id)
       return res.status(404).json({
         message: "Product id not found",
       });
 
+    // Check if product exists and belongs to the seller
+    let existingProduct = await ProductModel.findById(product_id);
+    if (!existingProduct)
+      return res.status(404).json({
+        message: "Product not found",
+      });
+
+    if (existingProduct.seller_id.toString() !== seller_id.toString())
+      return res.status(403).json({
+        message: "You don't have permission to update this product",
+      });
+
     let { productName, amount, description, currency, size, color } = req.body;
 
-    const uploadedImgs = await Promise.all(
-      req.files.map(
-        async (val) => await sendFiles(val.buffer, val.originalname)
-      )
-    );
+    let updateData = {
+      productName,
+      price: {
+        amount: Number(amount),
+        currency,
+      },
+      description,
+    };
+
+    // Convert size and color to arrays if provided
+    if (size) {
+      updateData.sizes = Array.isArray(size) ? size : size.split(',').map(s => s.trim());
+    }
+    if (color) {
+      updateData.colors = Array.isArray(color) ? color : color.split(',').map(c => c.trim());
+    }
+
+    if (req.files && req.files.length > 0) {
+      const uploadedImgs = await Promise.all(
+        req.files.map(
+          async (val) => await sendFiles(val.buffer, val.originalname)
+        )
+      );
+      updateData.images = uploadedImgs.map((val) => val.url);
+    }
 
     let updatedProduct = await ProductModel.findByIdAndUpdate(
-      { _id: product_id },
-      {
-        productName,
-        price: {
-          amount,
-          currency,
-        },
-        description,
-        colors: color,
-        sizes: size,
-        images: uploadedImgs.map((val) => val.url),
-      }
+      product_id,
+      updateData,
+      { new: true }
     );
-
-    await updatedProduct.save();
 
     if (!updatedProduct)
       return res.status(400).json({
@@ -128,6 +160,7 @@ const updateProductDataController = async (req, res) => {
     console.log("error in update product api api->", error);
     return res.status(500).json({
       message: "internal server error",
+      error: error.message,
     });
   }
 };
@@ -140,17 +173,40 @@ const deleteProductController = async (req, res) => {
       });
 
     let product_id = req.params.id;
+    let seller_id = req.seller._id;
 
     if (!product_id)
       return res.status(404).json({
         message: "Product id not found",
       });
 
+    // Check if product exists and belongs to the seller
+    let existingProduct = await ProductModel.findById(product_id);
+    if (!existingProduct)
+      return res.status(404).json({
+        message: "Product not found",
+      });
+
+    if (existingProduct.seller_id.toString() !== seller_id.toString())
+      return res.status(403).json({
+        message: "You don't have permission to delete this product",
+      });
+
     let delPro = await ProductModel.findByIdAndDelete(product_id);
+
+    if (!delPro)
+      return res.status(404).json({
+        message: "Product not found",
+      });
+
+    return res.status(200).json({
+      message: "Product deleted successfully",
+    });
   } catch (error) {
     console.log("error in delete product api->", error);
     return res.status(500).json({
       message: "internal server error",
+      error: error.message,
     });
   }
 };

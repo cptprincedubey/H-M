@@ -11,14 +11,11 @@ const userJoiSchema = joi.object({
   }),
 
   phone: joi
-    .number()
-    .integer()
-    .min(1000000000)
-    .max(9999999999)
+    .string()
+    .pattern(/^[0-9]{10}$/)
     .required()
     .messages({
-      "number.min": "please enter valid phone number",
-      "number.max": "please enter valid phone number",
+      "string.pattern.base": "please enter valid 10-digit phone number",
     }),
 
   password: joi.string().min(6).max(10).required().messages({
