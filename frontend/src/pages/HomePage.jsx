@@ -86,13 +86,7 @@ const HomePage = () => {
               <div className="text-4xl mb-2">👶</div>
               <h3 className="font-semibold text-lg">Kids</h3>
             </Link>
-            <Link
-              to="/beauty"
-              className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition text-center"
-            >
-              <div className="text-4xl mb-2">💄</div>
-              <h3 className="font-semibold text-lg">Beauty</h3>
-            </Link>
+           
           </div>
         </div>
       </div>
