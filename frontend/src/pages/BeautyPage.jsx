@@ -82,20 +82,57 @@ const BeautyPage = () => {
       <div className="max-w-[1600px] mx-auto px-4 mb-16">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Best Sellers</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="group">
-              <div className="relative overflow-hidden bg-[#faf9f8] aspect-square mb-3">
-                <img
-                  src={`https://images.unsplash.com/photo-${1596755389378 + item}?w=400&h=400&fit=crop`}
-                  alt={`Product ${item}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <h3 className="text-sm font-medium mb-1">Beauty Product {item}</h3>
-              <p className="text-sm text-gray-600 mb-1">Description</p>
-              <p className="text-sm font-bold">$19.99</p>
+          <div className="group">
+            <div className="relative overflow-hidden bg-[#faf9f8] aspect-square mb-3">
+              <img
+                src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop"
+                alt="Lipstick Set"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
             </div>
-          ))}
+            <h3 className="text-sm font-medium mb-1">Matte Lipstick Set</h3>
+            <p className="text-sm text-gray-600 mb-1">5 vibrant colors</p>
+            <p className="text-sm font-bold">$19.99</p>
+          </div>
+
+          <div className="group">
+            <div className="relative overflow-hidden bg-[#faf9f8] aspect-square mb-3">
+              <img
+                src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop"
+                alt="Skincare Set"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <h3 className="text-sm font-medium mb-1">Hydrating Serum</h3>
+            <p className="text-sm text-gray-600 mb-1">All skin types</p>
+            <p className="text-sm font-bold">$24.99</p>
+          </div>
+
+          <div className="group">
+            <div className="relative overflow-hidden bg-[#faf9f8] aspect-square mb-3">
+              <img
+                src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=400&fit=crop"
+                alt="Hair Mask"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <h3 className="text-sm font-medium mb-1">Nourishing Hair Mask</h3>
+            <p className="text-sm text-gray-600 mb-1">Deep conditioning</p>
+            <p className="text-sm font-bold">$16.99</p>
+          </div>
+
+          <div className="group">
+            <div className="relative overflow-hidden bg-[#faf9f8] aspect-square mb-3">
+              <img
+                src="https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop"
+                alt="Perfume"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <h3 className="text-sm font-medium mb-1">Signature Fragrance</h3>
+            <p className="text-sm text-gray-600 mb-1">50ml Eau de Parfum</p>
+            <p className="text-sm font-bold">$29.99</p>
+          </div>
         </div>
       </div>
 
