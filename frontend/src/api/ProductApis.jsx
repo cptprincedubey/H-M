@@ -1,24 +1,27 @@
 import { axiosInstance } from "../config/axiosInstance";
 
 export const getProductByCategory = async (category) => {
+  if (!category || typeof category !== "string") {
+    return { productsData: [], message: "No category" };
+  }
+  const categorySlug = category.trim().toLowerCase();
   try {
-    const res = await axiosInstance.get(`/products/${category}`);
-    if (res && res.data) {
-      return res.data;
-    }
-    throw new Error("No data received from server");
+    const res = await axiosInstance.get(`/products/${categorySlug}`);
+    const data = res?.data;
+    const list = Array.isArray(data?.productsData) ? data.productsData : [];
+    return {
+      productsData: list,
+      message: data?.message || (list.length ? "Products fetched" : "No products found"),
+    };
   } catch (error) {
     console.error("Error fetching products:", error);
-    // Return empty data structure instead of throwing to prevent UI errors
-    if (error.code === 'ERR_NETWORK' || !error.response) {
-      // Network error - return empty structure
-      return {
-        productsData: [],
-        message: "Cannot connect to server",
-      };
-    }
-    // Re-throw other errors so React Query can handle them
-    throw error;
+    return {
+      productsData: [],
+      message:
+        error.code === "ERR_NETWORK" || !error.response
+          ? "Cannot connect to server"
+          : error.response?.data?.message || "No products found",
+    };
   }
 };
 

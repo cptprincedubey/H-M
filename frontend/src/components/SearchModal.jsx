@@ -26,4 +26,3 @@ const SearchModal = ({ isOpen, onClose }) => {
 };
 
 export default SearchModal;
-

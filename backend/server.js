@@ -5,6 +5,8 @@ const authRoutes = require("./src/routes/auth.routes");
 const productRoutes = require("./src/routes/product.routes");
 const sellerAuthRoutes = require("./src/routes/seller.Auth.routes");
 const paymentRoutes = require("./src/routes/payment.routes");
+const cartRoutes = require("./src/routes/cart.routes");
+const favoritesRoutes = require("./src/routes/favorites.routes");
 
 const connectDB = require("./src/config/db");
 const cookieParser = require("cookie-parser");
@@ -35,7 +37,9 @@ app.get("/", (req, res) => {
         seller: "/api/auth/seller"
       },
       products: "/api/products",
-      payment: "/api/payment"
+      payment: "/api/payment",
+      cart: "/api/cart",
+      favorites: "/api/favorites"
     }
   });
 });
@@ -53,6 +57,8 @@ app.use("/api/auth/user", authRoutes);
 app.use("/api/auth/seller", sellerAuthRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/favorites", favoritesRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

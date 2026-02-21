@@ -20,6 +20,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       minLength: 6,
     },
+    favorites: [
+      {
+        product_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "products",
+        },
+        productName: String,
+        price: Number,
+        images: [String],
+        category: String,
+        addedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

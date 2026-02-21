@@ -69,24 +69,27 @@ const getAllProductsDataController = async (req, res) => {
   try {
     let category = req.params.category;
 
-    if (!category) {
-      return res.status(400).json({
+    if (!category || typeof category !== "string") {
+      return res.status(200).json({
+        productsData: [],
         message: "Category is required",
       });
     }
 
-    let products = await ProductModel.find({ category });
+    // Normalize to lowercase so "Men", "MEN", "men" all match DB (ladies, men, kids, beauty, home)
+    const categoryLower = category.trim().toLowerCase();
 
-    // Return empty array instead of 404 for better UX
+    let products = await ProductModel.find({ category: categoryLower }).lean();
+
     return res.status(200).json({
-      productsData: products || [],
+      productsData: Array.isArray(products) ? products : [],
       message: products && products.length > 0 ? "Products fetched" : "No products found",
     });
   } catch (error) {
     console.log("error in get product api->", error);
-    return res.status(500).json({
-      message: "internal server error",
-      error: error.message,
+    return res.status(200).json({
+      productsData: [],
+      message: "No products found",
     });
   }
 };

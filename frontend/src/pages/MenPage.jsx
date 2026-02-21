@@ -110,7 +110,7 @@ const MenPage = () => {
 
           <Link to="/men/accessories" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
-              src="https://images.unsplash.com/photo-1624222247344-550fb60583c0?w=500&h=500&fit=crop"
+              src="https://images.unsplash.com/photo-1479064555552-3ef4979f8908?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Accessories"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -132,7 +132,7 @@ const MenPage = () => {
 
           <Link to="/men/suits" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
-              src="https://images.unsplash.com/photo-1594938384675-be46b096e440?w=500&h=500&fit=crop"
+              src="https://media.istockphoto.com/id/623214996/photo/dressed-in-his-business-best.jpg?s=2048x2048&w=is&k=20&c=m1y8dPo8jFNSqphe2eVcsO3xHQ_4elH1uaWDqCe6UdA="
               alt="Suits & Blazers"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />

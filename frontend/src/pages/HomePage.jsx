@@ -89,14 +89,14 @@ const HomePage = () => {
             </div>
           </Link>
 
-          <Link to="/home" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
+          <Link to="/beauty" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
-              src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=500&h=500&fit=crop"
-              alt="Home"
+              src="https://media.istockphoto.com/id/695987012/photo/beautiful-woman.jpg?s=2048x2048&w=is&k=20&c=FbdUFvNoud6FMmgQ7ZK-Ywy65YNfji0T9h6AW_mGdUg="
+              alt="Beauty"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-4">
-              <h3 className="text-xl font-bold uppercase tracking-wide">Home</h3>
+              <h3 className="text-xl font-bold uppercase tracking-wide">Beauty</h3>
             </div>
           </Link>
         </div>
@@ -114,7 +114,7 @@ const HomePage = () => {
           <h2 className="text-5xl font-bold mb-4 tracking-tight">TRENDING NOW</h2>
           <p className="text-lg mb-6 font-light">Discover our most-loved pieces this season</p>
           <Link
-            to="/trending"
+            to="/"
             className="bg-white text-black px-8 py-3 text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase inline-block w-fit"
           >
             Explore
@@ -158,7 +158,7 @@ const HomePage = () => {
                 Discover the pieces you need to refresh your wardrobe this season. From timeless basics to statement pieces, we've curated the perfect collection.
               </p>
               <Link
-                to="/magazine"
+                to="/home"
                 className="text-sm font-bold tracking-wider underline hover:no-underline uppercase"
               >
                 Read More
@@ -180,7 +180,7 @@ const HomePage = () => {
               We're committed to making fashion more sustainable. Explore our conscious collections made with eco-friendly materials and ethical practices.
             </p>
             <Link
-              to="/sustainability"
+              to="/home"
               className="bg-black text-white px-8 py-3 text-sm font-bold tracking-wider hover:bg-gray-800 transition-all uppercase inline-block"
             >
               Learn More
@@ -258,14 +258,8 @@ const HomePage = () => {
             Join now and get 10% off your first purchase! Plus, enjoy member-exclusive offers and early access to sales.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center max-w-xl mx-auto">
-            <input
-              type="email"
-              placeholder="Email address"
-              className="px-6 py-4 flex-1 text-black bg-white border border-gray-300 rounded-lg focus:outline-none text-sm"
-            />
-            <button className="bg-white text-black px-8 py-4 text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase">
-              Sign Up
-            </button>
+          
+           
           </div>
         </div>
       </div>
@@ -290,12 +284,12 @@ const HomePage = () => {
             <div>
               <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">CORPORATE INFO</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/career" className="hover:underline">CAREER AT H&M</Link></li>
-                <li><Link to="/about" className="hover:underline">ABOUT H&M GROUP</Link></li>
-                <li><Link to="/sustainability" className="hover:underline">SUSTAINABILITY H&M GROUP</Link></li>
-                <li><Link to="/press" className="hover:underline">PRESS</Link></li>
-                <li><Link to="/investors" className="hover:underline">INVESTOR RELATIONS</Link></li>
-                <li><Link to="/governance" className="hover:underline">CORPORATE GOVERNANCE</Link></li>
+                <li><Link to="/home" className="hover:underline">CAREER AT H&M</Link></li>
+                <li><Link to="/home" className="hover:underline">ABOUT H&M GROUP</Link></li>
+                <li><Link to="/home" className="hover:underline">SUSTAINABILITY H&M GROUP</Link></li>
+                <li><Link to="/home" className="hover:underline">PRESS</Link></li>
+                <li><Link to="/home" className="hover:underline">INVESTOR RELATIONS</Link></li>
+                <li><Link to="/home" className="hover:underline">CORPORATE GOVERNANCE</Link></li>
               </ul>
             </div>
 
@@ -303,14 +297,14 @@ const HomePage = () => {
             <div>
               <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">HELP</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/customer-service" className="hover:underline">CUSTOMER SERVICE</Link></li>
-                <li><Link to="/my-account" className="hover:underline">MY H&M</Link></li>
-                <li><Link to="/store" className="hover:underline">FIND A STORE</Link></li>
-                <li><Link to="/legal" className="hover:underline">LEGAL & PRIVACY</Link></li>
-                <li><Link to="/contact" className="hover:underline">CONTACT</Link></li>
-                <li><Link to="/secure" className="hover:underline">SECURE SHOPPING</Link></li>
-                <li><Link to="/cookie" className="hover:underline">COOKIE NOTICE</Link></li>
-                <li><Link to="/settings" className="hover:underline">COOKIE SETTINGS</Link></li>
+                <li><Link to="/home" className="hover:underline">CUSTOMER SERVICE</Link></li>
+                <li><Link to="/login" className="hover:underline">MY H&M</Link></li>
+                <li><Link to="/home" className="hover:underline">FIND A STORE</Link></li>
+                <li><Link to="/home" className="hover:underline">LEGAL & PRIVACY</Link></li>
+                <li><Link to="/home" className="hover:underline">CONTACT</Link></li>
+                <li><Link to="/home" className="hover:underline">SECURE SHOPPING</Link></li>
+                <li><Link to="/home" className="hover:underline">COOKIE NOTICE</Link></li>
+                <li><Link to="/home" className="hover:underline">COOKIE SETTINGS</Link></li>
               </ul>
             </div>
 
@@ -320,7 +314,7 @@ const HomePage = () => {
               <p className="text-sm mb-4">
                 Sign up now and be the first to know about exclusive offers, latest fashion news & style tips!
               </p>
-              <Link to="/signup" className="text-sm font-bold underline hover:no-underline uppercase">
+              <Link to="/register" className="text-sm font-bold underline hover:no-underline uppercase">
                 Read More
               </Link>
             </div>
@@ -331,7 +325,7 @@ const HomePage = () => {
             <div className="mb-4 md:mb-0">
               <p className="text-sm flex items-center gap-2">
                 <span className="font-bold">INDIA (Rs.)</span>
-                <Link to="/region" className="underline hover:no-underline">CHANGE REGION</Link>
+                <Link to="/home" className="underline hover:no-underline">CHANGE REGION</Link>
               </p>
             </div>
             <div className="flex gap-4">

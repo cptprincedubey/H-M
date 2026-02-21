@@ -22,8 +22,13 @@ const Register = () => {
       const res = await axiosInstance.post("/auth/user/register", { name, email, phone, password });
       if (res.data.user) {
         setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         toast.success("Registration successful!");
-        navigate("/");
+        // Refresh page to initialize cart and favorites
+        setTimeout(() => {
+          navigate("/");
+          window.location.reload();
+        }, 500);
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Registration failed";
