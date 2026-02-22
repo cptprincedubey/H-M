@@ -12,6 +12,7 @@ const BackendStatus = () => {
         const res = await axiosInstance.get("/health");
         setIsOnline(res.status === 200);
       } catch (error) {
+        console.error(error);
         setIsOnline(false);
       } finally {
         setIsChecking(false);
@@ -33,7 +34,7 @@ const BackendStatus = () => {
           <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
           <div className="flex-1">
             <p className="text-sm text-red-700 font-medium">
-              Backend server is not running
+              offline
             </p>
             <p className="text-xs text-red-600 mt-1">
               Please start the backend server on port 4500 to use authentication and other features.
@@ -49,7 +50,7 @@ const BackendStatus = () => {
       <div className="flex items-center">
         <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
         <p className="text-xs text-green-700">
-          Backend server is running
+          online
         </p>
       </div>
     </div>
@@ -57,3 +58,4 @@ const BackendStatus = () => {
 };
 
 export default BackendStatus;
+

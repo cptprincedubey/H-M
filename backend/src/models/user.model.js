@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       minLength: 6,
     },
+    resetToken: {
+      type: String,
+      default: null,
+    },
+    resetTokenExpire: {
+      type: Date,
+      default: null,
+    },
     favorites: [
       {
         product_id: {

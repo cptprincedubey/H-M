@@ -13,6 +13,9 @@ import SellerRegister from "../pages/SellerRegister";
 import CartPage from "../pages/CartPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import FavoritesPage from "../pages/FavoritesPage";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import UpdatePassword from "../pages/UpdatePassword";
 import NotFoundPage from "../pages/NotFoundPage";
 import { AuthProvider } from "../context/AuthContext";
 
@@ -29,12 +32,16 @@ const router = createBrowserRouter([
       { path: "beauty", element: <BeautyPage /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "reset-password/:token", element: <ResetPassword /> },
+      { path: "update-password", element: <UpdatePassword /> },
       { path: "seller/login", element: <SellerLogin /> },
       { path: "seller/register", element: <SellerRegister /> },
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckoutPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       { path: "*", element: <NotFoundPage /> },
+     
     ],
   },
 ]);

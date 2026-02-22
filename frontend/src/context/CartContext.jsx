@@ -3,6 +3,7 @@ import { axiosInstance } from "../config/axiosInstance";
 
 const CartContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
@@ -211,7 +212,7 @@ export const CartProvider = ({ children }) => {
   };
 
   // Add to favorites
-  const addToFavorites = async (productId, product) => {
+  const addToFavorites = async (productId) => {
     const userId = getUserId();
     if (!userId) {
       throw new Error("Please login to add favorites");
