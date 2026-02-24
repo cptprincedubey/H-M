@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-toastify";
-import { error } from "../../../backend/src/validator/user.validation";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const Icon = ({ d, size = 20, color = "currentColor" }) => (
@@ -192,11 +191,10 @@ const SellerDashboard = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // Fetch products for all categories
-      const results = await Promise.all(
-        CATEGORIES.map(cat => axiosInstance.get(`/products/${cat}`).then(r => r.data.productsData || []).catch(() => []))
-      );
-      setProducts(results.flat());
+      // Fetch products that belong to the logged-in seller
+      const res = await axiosInstance.get(`/products/seller`);
+      const list = res?.data?.productsData || [];
+      setProducts(list);
     } catch {
       toast.error("Failed to load products");
     } finally {
@@ -220,7 +218,9 @@ const SellerDashboard = () => {
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/auth/seller/logout");
-    } catch {error}
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Logout failed");
+    }
     navigate("/seller/login");
   };
 

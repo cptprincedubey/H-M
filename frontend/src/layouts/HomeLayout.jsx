@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
 import SearchModal from "../components/SearchModal";
 import { useCart } from "../context/CartContext";

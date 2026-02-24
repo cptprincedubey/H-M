@@ -144,13 +144,10 @@ const logoutController = async (req, res) => {
       });
     }
 
-    await cacheInstance.set(token, "blacklisted");
-
+    // Clear the authentication cookie
     res.clearCookie("token");
 
-    return res.status(200).json({
-      message: "User logged out",
-    });
+    return res.status(200).json({ message: "User logged out" });
   } catch (error) {
     return res.status(500).json({
       message: "internal server error",

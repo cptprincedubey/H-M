@@ -10,6 +10,8 @@ const favoritesRoutes = require("./src/routes/favorites.routes");
 
 const connectDB = require("./src/config/db");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 app.use(
@@ -19,6 +21,11 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+// Ensure uploads folder exists and serve it statically (used as ImageKit fallback)
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+app.use('/uploads', express.static(uploadsDir));
 
 app.use(express.json());
 

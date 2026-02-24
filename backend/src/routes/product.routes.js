@@ -13,8 +13,10 @@ const router = express.Router();
 
 // Search route (must be before /:category route)
 router.get("/search", searchProductsController);
-
 router.post("/create", sellerMiddleware, upload.array("images", 5), createProductController);
+
+// Seller-specific products
+router.get("/seller", sellerMiddleware, require("../controllers/product.controller").getSellerProductsController);
 
 router.get("/:category", getAllProductsDataController);
 router.put(

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-toastify";
 import BackendStatus from "../components/BackendStatus";

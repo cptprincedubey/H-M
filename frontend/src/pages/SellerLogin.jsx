@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-toastify";
 import BackendStatus from "../components/BackendStatus";
@@ -8,7 +8,7 @@ const SellerLogin = () => {
   const [sellerEmail, setSellerEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate("/seller/dashboard");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();

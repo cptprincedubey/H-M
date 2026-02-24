@@ -18,34 +18,31 @@ const createProductController = async (req, res) => {
 
     console.log("uploaded img ->", uploadedImgs);
 
-    let { productName, amount, description, currency, size, color, category } =
-      req.body;
+    let { productName, amount, description, currency, size, color, category } = req.body;
 
-    if (
-      !productName ||
-      !amount ||
-      !description ||
-      !currency ||
-      !color ||
-      !size ||
-      !category
-    )
-      return res.status(422).json({
-        message: "All fields are required",
-      });
+    if (!productName || !amount || !description || !currency || !color || !size || !category) {
+      return res.status(422).json({ message: "All fields are required" });
+    }
 
-    // Convert size and color to arrays if they're strings
-    const sizesArray = Array.isArray(size) ? size : size.split(',').map(s => s.trim());
-    const colorsArray = Array.isArray(color) ? color : color.split(',').map(c => c.trim());
+    // Normalize and convert size and color to arrays
+    const sizesArray = Array.isArray(size)
+      ? size.map(s => String(s).trim().toLowerCase())
+      : String(size).split(',').map(s => s.trim().toLowerCase());
+    const colorsArray = Array.isArray(color)
+      ? color.map(c => String(c).trim())
+      : String(color).split(',').map(c => c.trim());
+
+    // Normalize category to lowercase (model expects lowercase enums)
+    const categoryNorm = String(category).trim().toLowerCase();
 
     let newProduct = await ProductModel.create({
-      productName,
+      productName: String(productName).trim(),
       price: {
         amount: Number(amount),
-        currency,
+        currency: String(currency).trim(),
       },
-      category,
-      description,
+      category: categoryNorm,
+      description: String(description).trim(),
       colors: colorsArray,
       sizes: sizesArray,
       images: uploadedImgs.map((val) => val.url),
@@ -58,6 +55,11 @@ const createProductController = async (req, res) => {
     });
   } catch (error) {
     console.log("error in create order api->", error);
+    // Handle Mongoose validation errors with a 400 and readable message
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ message: messages.join(', ') });
+    }
     return res.status(500).json({
       message: "internal server error",
       error: error.message,
@@ -91,6 +93,20 @@ const getAllProductsDataController = async (req, res) => {
       productsData: [],
       message: "No products found",
     });
+  }
+};
+
+const getSellerProductsController = async (req, res) => {
+  try {
+    if (!req.seller) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const sellerId = req.seller._id;
+    const products = await ProductModel.find({ seller_id: sellerId }).lean();
+    return res.status(200).json({ productsData: Array.isArray(products) ? products : [], message: "Seller products fetched" });
+  } catch (error) {
+    console.log("error in get seller products->", error);
+    return res.status(500).json({ productsData: [], message: "Failed to fetch seller products" });
   }
 };
 
@@ -217,6 +233,7 @@ const deleteProductController = async (req, res) => {
 module.exports = {
   createProductController,
   getAllProductsDataController,
+  getSellerProductsController,
   updateProductDataController,
   deleteProductController,
 };

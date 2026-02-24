@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Heart } from "lucide-react";
 import { toast } from "react-toastify";

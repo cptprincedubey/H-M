@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Heart, ShoppingBag } from "lucide-react";
 import { toast } from "react-toastify";
