@@ -2,16 +2,20 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchModal from "./SearchModal";
 import { AuthContext } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const { user, setUser } = useContext(AuthContext);
+  const { cart, favorites } = useCart();
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    // Dispatch custom event to notify CartContext about logout
+    window.dispatchEvent(new Event("user-changed"));
     setIsAccountOpen(false);
   };
 
@@ -140,10 +144,15 @@ const Header = () => {
             </div>
 
             {/* Favorites */}
-            <Link to="/favorites" className="p-2 hover:bg-gray-100 rounded-full" aria-label="Favorites">
+            <Link to="/favorites" className="p-2 hover:bg-gray-100 rounded-full relative" aria-label="Favorites">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
+              {favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {favorites.length}
+                </span>
+              )}
             </Link>
 
             {/* Shopping Bag */}
@@ -151,9 +160,11 @@ const Header = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                0
-              </span>
+              {cart.totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cart.totalQuantity}
+                </span>
+              )}
             </Link>
           </div>
         </div>

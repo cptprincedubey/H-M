@@ -21,6 +21,8 @@ const Login = () => {
       if (res.data && res.data.user) {
         setUser(res.data.user);
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Dispatch custom event to notify CartContext about login
+        window.dispatchEvent(new Event("user-changed"));
         toast.success(res.data.message || "Login successful!");
         // Redirect to user profile after successful login
         setTimeout(() => {

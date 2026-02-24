@@ -23,6 +23,8 @@ const Register = () => {
       if (res.data && res.data.user) {
         setUser(res.data.user);
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Dispatch custom event to notify CartContext about registration/login
+        window.dispatchEvent(new Event("user-changed"));
         toast.success(res.data.message || "Registration successful!");
         // Redirect to user profile after successful registration
         setTimeout(() => {

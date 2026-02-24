@@ -13,7 +13,7 @@ const CartPage = () => {
 
   useEffect(() => {
     fetchCart();
-  }, [fetchCart]);
+  }, []);
 
   const handleQuantityChange = async (product_id, newQuantity, size, color) => {
     if (newQuantity < 1) {

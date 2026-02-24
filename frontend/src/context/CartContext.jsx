@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { axiosInstance } from "../config/axiosInstance";
 
 const CartContext = createContext();
@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
   };
 
   // Fetch cart
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     const userId = getUserId();
     if (!userId) {
       setCart({ items: [], totalAmount: 0, totalQuantity: 0 });
@@ -71,10 +71,10 @@ export const CartProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Fetch favorites
-  const fetchFavorites = async () => {
+  const fetchFavorites = useCallback(async () => {
     const userId = getUserId();
     if (!userId) {
       setFavorites([]);
@@ -95,7 +95,7 @@ export const CartProvider = ({ children }) => {
         setFavorites([]);
       }
     }
-  };
+  }, []);
 
   // Add to cart
   const addToCart = async (productId, quantity = 1, size = "M", color = "Black") => {
@@ -279,6 +279,31 @@ export const CartProvider = ({ children }) => {
       setCart({ items: [], totalAmount: 0, totalQuantity: 0 });
       setFavorites([]);
     }
+  }, []);
+
+  // Watch for user changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userId = getUserId();
+      if (userId) {
+        fetchCart();
+        fetchFavorites();
+      } else {
+        setCart({ items: [], totalAmount: 0, totalQuantity: 0 });
+        setFavorites([]);
+      }
+    };
+
+    // Listen for storage changes (works across tabs and logout)
+    window.addEventListener("storage", handleStorageChange);
+    
+    // Also create a custom event listener for same-tab logout
+    window.addEventListener("user-changed", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("user-changed", handleStorageChange);
+    };
   }, []);
 
   const value = {
