@@ -42,10 +42,16 @@ const processPaymentController = async (req, res) => {
       });
     }
 
+    // Generate a short receipt ID (max 40 chars)
+    // Format: receipt_<timestamp_last_8_digits>_<short_id>
+    const timestamp = Date.now().toString().slice(-8);
+    const shortId = (user_id || 'guest').toString().slice(-6);
+    const receipt = `rcpt_${timestamp}_${shortId}`.slice(0, 40);
+    
     const options = {
       amount: amountInPaise,
       currency: currency.toUpperCase() || "INR",
-      receipt: `receipt_${Date.now()}_${user_id || 'guest'}`,
+      receipt: receipt,
       payment_capture: 1,
     };
 

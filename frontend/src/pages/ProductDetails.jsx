@@ -23,7 +23,7 @@ const ProductDetails = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/api/products/${id}`
+          `http://localhost:5000/api/products/id/${id}`
         );
         setProduct(response.data.product);
         setError(null);
