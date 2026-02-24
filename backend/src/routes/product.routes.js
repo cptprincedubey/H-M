@@ -3,6 +3,7 @@ const upload = require("../config/multer");
 const {
   createProductController,
   getAllProductsDataController,
+  getSingleProductController,
   updateProductDataController,
   deleteProductController,
 } = require("../controllers/product.controller");
@@ -18,6 +19,10 @@ router.post("/create", sellerMiddleware, upload.array("images", 5), createProduc
 // Seller-specific products
 router.get("/seller", sellerMiddleware, require("../controllers/product.controller").getSellerProductsController);
 
+// Single product by ID - matches any ID string
+router.get("/id/:id", getSingleProductController);
+
+// Category products - catches all other single-word requests (ladies, men, kids, beauty, etc)
 router.get("/:category", getAllProductsDataController);
 router.put(
   "/update/:id",

@@ -51,7 +51,7 @@ const CartPage = () => {
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+        <div className="max-w-400 mx-auto px-4 sm:px-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-12 uppercase tracking-wide">Shopping Bag</h1>
           <div className="text-center py-12 sm:py-16 md:py-20">
             <p className="text-lg sm:text-xl text-gray-600 mb-4 sm:mb-6">Your shopping bag is empty</p>
@@ -69,7 +69,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+      <div className="max-w-400 mx-auto px-4 sm:px-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-12 uppercase tracking-wide">Shopping Bag</h1>
 
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
@@ -82,7 +82,7 @@ const CartPage = () => {
                   <div key={`${productId}-${item.size}-${item.color}`} className="border border-gray-200 p-3 sm:p-4 md:p-6">
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6">
                       {/* Product Image */}
-                      <div className="w-full sm:w-24 h-48 sm:h-32 bg-gray-100 flex-shrink-0">
+                      <div className="w-full sm:w-24 h-48 sm:h-32 bg-gray-100 shrink-0">
                         {item.images && item.images[0] && (
                           <img
                             src={item.images[0]}

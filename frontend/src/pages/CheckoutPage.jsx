@@ -221,7 +221,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+      <div className="max-w-400 mx-auto px-4 sm:px-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-12 uppercase tracking-wide">Checkout</h1>
 
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
@@ -348,7 +348,7 @@ const CheckoutPage = () => {
             <div className="bg-white border border-gray-200 p-4 sm:p-6 md:p-8 sticky top-20 sm:top-24">
               <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">Order Summary</h2>
 
-              <div className="mb-4 sm:mb-6 max-h-[200px] sm:max-h-[300px] overflow-y-auto">
+              <div className="mb-4 sm:mb-6 max-h-50 sm:max-h-75 overflow-y-auto">
                 {cart.items.map((item, index) => {
                   const productId = item.product_id?._id || item.product_id || `item-${index}`;
                   return (

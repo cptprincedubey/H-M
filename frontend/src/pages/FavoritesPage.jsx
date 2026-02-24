@@ -33,7 +33,7 @@ const FavoritesPage = () => {
   if (!favorites || favorites.length === 0) {
     return (
       <div className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+        <div className="max-w-400 mx-auto px-4 sm:px-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-12 uppercase tracking-wide">FAVOURITES</h1>
           <div className="text-center py-12 sm:py-16 md:py-20">
             <Heart size={48} className="sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 text-gray-300" />
@@ -55,7 +55,7 @@ const FavoritesPage = () => {
 
   return (
     <div className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+      <div className="max-w-400 mx-auto px-4 sm:px-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-12 uppercase tracking-wide">FAVOURITES</h1>
         <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 md:mb-12">{favorites.length} {favorites.length === 1 ? 'Item' : 'Items'}</p>
 

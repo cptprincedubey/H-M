@@ -26,7 +26,7 @@ const HomeLayout = () => {
         </button>
 
         <div className="flex items-center gap-4 sm:gap-8 lg:gap-12 flex-1">
-          <NavLink to="/home" className="h-10 w-10 sm:h-13 sm:w-13 flex-shrink-0">
+          <NavLink to="/home" className="h-10 w-10 sm:h-13 sm:w-13 shrink-0">
             <img
               className="h-full w-full object-contain"
               src="https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg"

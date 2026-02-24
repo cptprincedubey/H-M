@@ -19,7 +19,7 @@ const MenPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Banner */}
-      <div className="relative w-full h-[500px] overflow-hidden mb-12">
+      <div className="relative w-full h-125 overflow-hidden mb-12">
         <img
           src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600&h=900&fit=crop"
           alt="Men Collection"
@@ -33,7 +33,7 @@ const MenPage = () => {
       </div>
 
       {/* Category Filters */}
-      <div className="max-w-[1600px] mx-auto px-4 mb-12">
+      <div className="max-w-400 mx-auto px-4 mb-12">
         <div className="flex flex-wrap gap-4 mb-8 pb-6 border-b border-gray-200">
           {categories.map((category) => (
             <button
@@ -52,7 +52,7 @@ const MenPage = () => {
       </div>
 
       {/* Shop by Category Grid */}
-      <div className="max-w-[1600px] mx-auto px-4 mb-16">
+      <div className="max-w-400 mx-auto px-4 mb-16">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link to="/men/shirts" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
@@ -147,7 +147,7 @@ const MenPage = () => {
 
       {/* Featured Banner - New Arrivals */}
       <div className="bg-[#faf9f8] py-16 mb-16">
-        <div className="max-w-[1600px] mx-auto px-4">
+        <div className="max-w-400 mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="px-8">
               <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">NEW ARRIVALS</h3>
@@ -168,26 +168,26 @@ const MenPage = () => {
               <img
                 src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&h=800&fit=crop"
                 alt="New Arrivals"
-                className="w-full h-[600px] object-cover"
+                className="w-full h-150 object-cover"
               />
             </div>
           </div>
         </div>
       </div>
       {/* Featured Products */}
-      <div className="max-w-[1600px] mx-auto px-4 py-16 mb-16">
+      <div className="max-w-400 mx-auto px-4 py-16 mb-16">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Featured Products</h2>
         <FeaturedGrid category="men" />
       </div>
 
       {/* Trending Section */}
-      <div className="max-w-[1600px] mx-auto px-4 py-16 mb-16">
+      <div className="max-w-400 mx-auto px-4 py-16 mb-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
             <img
               src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=800&h=800&fit=crop"
               alt="Denim Collection"
-              className="w-full h-[600px] object-cover"
+              className="w-full h-150 object-cover"
             />
           </div>
           <div className="px-8">
@@ -210,7 +210,7 @@ const MenPage = () => {
 
       {/* Info Section */}
       <div className="bg-white py-12">
-        <div className="max-w-[1200px] mx-auto px-4">
+        <div className="max-w-300 mx-auto px-4">
           <h2 className="text-3xl font-bold mb-6 uppercase tracking-wide">Men's Fashion at H&M</h2>
           <div className="space-y-4 text-base leading-relaxed text-gray-800">
             <p>
@@ -233,31 +233,56 @@ export default MenPage;
 
 const FeaturedGrid = ({ category }) => {
   const [items, setItems] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     let mounted = true;
-    getProductByCategory(category).then(res => {
-      if (mounted) setItems(res.productsData.slice(0, 8));
-    }).catch(() => {});
+    setLoading(true);
+    getProductByCategory(category)
+      .then(res => {
+        if (mounted) {
+          const products = res?.productsData || [];
+          setItems(Array.isArray(products) ? products.slice(0, 8) : []);
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching featured products:", err);
+        if (mounted) setItems([]);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
     return () => { mounted = false };
   }, [category]);
 
+  if (loading) {
+    return <p className="text-gray-500 text-center py-8">Loading products...</p>;
+  }
+
   if (!items || items.length === 0) {
-    return <p className="text-gray-500">No products available.</p>;
+    return <p className="text-gray-500 text-center py-8">No products available.</p>;
   }
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {items.map(p => (
-        <Link key={p._id} to={`/product/${p._id}`} className="group block bg-white rounded overflow-hidden shadow">
+        <Link 
+          key={p._id} 
+          to={`/product/${p._id}`} 
+          className="group block bg-white rounded overflow-hidden shadow hover:shadow-lg transition-shadow"
+        >
           {p.images?.[0] ? (
-            <img src={p.images[0]} alt={p.productName} className="w-full h-48 object-cover" />
+            <img 
+              src={p.images[0]} 
+              alt={p.productName} 
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
+            />
           ) : (
             <div className="w-full h-48 bg-gray-100" />
           )}
           <div className="p-4">
-            <h3 className="font-semibold text-sm">{p.productName}</h3>
-            <p className="text-xs text-gray-500">{p.price?.currency} {p.price?.amount}</p>
+            <h3 className="font-semibold text-sm line-clamp-2">{p.productName}</h3>
+            <p className="text-xs text-gray-500 mt-1">{p.price?.currency} {p.price?.amount}</p>
           </div>
         </Link>
       ))}

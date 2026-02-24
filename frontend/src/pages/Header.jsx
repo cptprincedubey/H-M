@@ -25,7 +25,7 @@ const Header = () => {
       </div>
 
       {/* Main Header */}
-      <div className="max-w-[1600px] mx-auto px-4">
+      <div className="max-w-400 mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Mobile Menu Button */}
           <button

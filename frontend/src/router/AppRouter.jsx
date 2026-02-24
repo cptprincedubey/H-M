@@ -16,6 +16,7 @@ import FavoritesPage from "../pages/FavoritesPage";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import UpdatePassword from "../pages/UpdatePassword";
+import ProductDetails from "../pages/ProductDetails";
 import NotFoundPage from "../pages/NotFoundPage";
 import { AuthProvider } from "../context/AuthContext";
 import SellerDashboard from "../pages/SellerDashboard";
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "kids/*", element: <KidsPage /> },
       { path: "beauty", element: <BeautyPage /> },
       { path: "beauty/*", element: <BeautyPage /> },
+      { path: "product/:id", element: <ProductDetails /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "forgot-password", element: <ForgotPassword /> },

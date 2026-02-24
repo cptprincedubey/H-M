@@ -230,10 +230,33 @@ const deleteProductController = async (req, res) => {
   }
 };
 
+const getSingleProductController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Validate MongoDB ObjectId - basic check
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await ProductModel.findById(id);
+    
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json({ product });
+  } catch (error) {
+    console.log("error in getSingleProduct->", error);
+    return res.status(500).json({ message: "Failed to fetch product" });
+  }
+};
+
 module.exports = {
   createProductController,
   getAllProductsDataController,
   getSellerProductsController,
+  getSingleProductController,
   updateProductDataController,
   deleteProductController,
 };

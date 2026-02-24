@@ -31,7 +31,7 @@ const HomePage = () => {
 
       {/* Hero Banner Section */}
       <div className="relative w-full">
-        <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+        <div className="relative w-full h-125 md:h-150 overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&h=900&fit=crop"
             alt="Hero Banner"
@@ -54,7 +54,7 @@ const HomePage = () => {
       </div>
 
       {/* Category Navigation Grid */}
-      <div className="max-w-[1600px] mx-auto px-4 py-12">
+      <div className="max-w-400 mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link to="/ladies" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
@@ -103,13 +103,13 @@ const HomePage = () => {
       </div>
 
       {/* Featured Banner */}
-      <div className="relative w-full h-[500px] overflow-hidden mb-12">
+      <div className="relative w-full h-125 overflow-hidden mb-12">
         <img
           src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop"
           alt="Featured Collection"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-black to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 text-white max-w-xl">
           <h2 className="text-5xl font-bold mb-4 tracking-tight">TRENDING NOW</h2>
           <p className="text-lg mb-6 font-light">Discover our most-loved pieces this season</p>
@@ -123,7 +123,7 @@ const HomePage = () => {
       </div>
 
       {/* Featured Products */}
-      <div className="max-w-[1600px] mx-auto px-4 py-12">
+      <div className="max-w-400 mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Featured Products</h2>
         {featuredProducts.length === 0 ? (
           <div className="text-center py-12">
@@ -140,13 +140,13 @@ const HomePage = () => {
 
       {/* Magazine Style Section */}
       <div className="bg-[#faf9f8] py-16">
-        <div className="max-w-[1600px] mx-auto px-4">
+        <div className="max-w-400 mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="order-2 md:order-1">
               <img
                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=1000&fit=crop"
                 alt="Magazine Feature"
-                className="w-full h-[600px] object-cover"
+                className="w-full h-150 object-cover"
               />
             </div>
             <div className="order-1 md:order-2 px-8">
@@ -169,7 +169,7 @@ const HomePage = () => {
       </div>
 
       {/* Sustainability Section */}
-      <div className="max-w-[1600px] mx-auto px-4 py-16">
+      <div className="max-w-400 mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="px-8">
             <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">SUSTAINABILITY</h3>
@@ -190,7 +190,7 @@ const HomePage = () => {
             <img
               src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&h=1000&fit=crop"
               alt="Sustainability"
-              className="w-full h-[600px] object-cover"
+              className="w-full h-150 object-cover"
             />
           </div>
         </div>
@@ -198,7 +198,7 @@ const HomePage = () => {
 
       {/* Home Décor Section - Exact H&M Layout */}
       <div className="bg-white py-16">
-        <div className="max-w-[1200px] mx-auto px-4">
+        <div className="max-w-300 mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Text Content - Left Side */}
             <div className="flex flex-col justify-start">
@@ -252,7 +252,7 @@ const HomePage = () => {
 
       {/* Newsletter Section */}
       <div className="bg-black text-white py-16">
-        <div className="max-w-screen-md mx-auto px-4 text-center">
+        <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4 tracking-tight">BECOME AN H&M MEMBER</h2>
           <p className="text-lg mb-8 font-light">
             Join now and get 10% off your first purchase! Plus, enjoy member-exclusive offers and early access to sales.
@@ -266,7 +266,7 @@ const HomePage = () => {
 
       {/* Footer - Exact H&M Structure */}
       <div className="bg-white py-12 border-t border-gray-200">
-        <div className="max-w-[1600px] mx-auto px-4">
+        <div className="max-w-400 mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {/* Shop Column */}
             <div>
