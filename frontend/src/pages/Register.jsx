@@ -70,7 +70,7 @@ const Register = () => {
                 onChange={(e) => setName(e.target.value)}
                 required
                 minLength={4}
-                maxLength={10}
+                maxLength={30}
                 className="appearance-none relative block w-full px-4 py-3 border-2 border-gray-200 placeholder-gray-400 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm hover:border-gray-300"
               />
             </div>

@@ -8,7 +8,7 @@ const SellerLogin = () => {
   const [sellerEmail, setSellerEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate("/seller/dashboard");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ const SellerLogin = () => {
       const res = await axiosInstance.post("/auth/seller/login", { sellerEmail, password });
       if (res.data.seller) {
         toast.success("Seller login successful!");
-        navigate("/");
+        navigate("/seller/dashboard");
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";

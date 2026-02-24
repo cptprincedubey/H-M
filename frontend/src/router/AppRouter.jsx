@@ -18,31 +18,51 @@ import ResetPassword from "../pages/ResetPassword";
 import UpdatePassword from "../pages/UpdatePassword";
 import NotFoundPage from "../pages/NotFoundPage";
 import { AuthProvider } from "../context/AuthContext";
+import SellerDashboard from "../pages/SellerDashboard";
 
 const router = createBrowserRouter([
+  // 1. User Routes (Jo HomeLayout/Navbar ke saath dikhenge)
   {
     path: "/",
     element: <HomeLayout />,
     children: [
       { index: true, element: <LadiesPage /> },
       { path: "home", element: <HomePage /> },
+      { path: "home/*", element: <HomePage /> },
       { path: "ladies", element: <LadiesPage /> },
+      { path: "ladies/*", element: <LadiesPage /> },
       { path: "men", element: <MenPage /> },
+      { path: "men/*", element: <MenPage /> },
       { path: "kids", element: <KidsPage /> },
+      { path: "kids/*", element: <KidsPage /> },
       { path: "beauty", element: <BeautyPage /> },
+      { path: "beauty/*", element: <BeautyPage /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "forgot-password", element: <ForgotPassword /> },
       { path: "reset-password/:token", element: <ResetPassword /> },
       { path: "update-password", element: <UpdatePassword /> },
-      { path: "seller/login", element: <SellerLogin /> },
-      { path: "seller/register", element: <SellerRegister /> },
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckoutPage /> },
       { path: "favorites", element: <FavoritesPage /> },
-      { path: "*", element: <NotFoundPage /> },
-     
+      { path: "seller/login", element: <SellerLogin /> },
+      { path: "seller/register", element: <SellerRegister /> },
+      // Yahan se NotFound hataya gaya hai taaki dashboard tak pahuch sake
     ],
+  },
+  // 2. Seller Dashboard (Alag Layout - No User Navbar)
+  {
+    path: "/seller/dashboard",
+    element: <SellerDashboard />,
+  },
+  {
+    path: "/seller/dashboard/*",
+    element: <SellerDashboard />,
+  },
+  // 3. Global NotFound (Sabse last mein)
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

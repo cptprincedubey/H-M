@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { max } = require("../validator/user.validation");
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      minLength: 4,
+      maxLength: 30,
+      
     },
     email: {
       type: String,
