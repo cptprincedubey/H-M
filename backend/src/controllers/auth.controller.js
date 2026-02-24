@@ -27,13 +27,17 @@ const registerController = async (req, res) => {
   try {
     let { name, email, phone, password } = req.body;
     
-    const existingUser = await UserModel.findOne({ email });
+    if (!name || !email || !phone || !password) {
+      return res.status(400).json({
+        message: "All fields (name, email, phone, password) are required",
+      });
+    }
 
-    console.log("exists--->", existingUser);
+    const existingUser = await UserModel.findOne({ email });
 
     if (existingUser)
       return res.status(400).json({
-        message: "user already registered",
+        message: "Email already registered. Please use a different email or login.",
       });
 
     const newUser = await UserModel.create({
@@ -44,19 +48,22 @@ const registerController = async (req, res) => {
     });
 
     let token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 3600000, // 1 hour
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    const userResponse = newUser.toObject();
+    delete userResponse.password;
+
     return res.status(201).json({
-      message: "user registered",
-      user: newUser,
+      message: "User registered successfully",
+      user: userResponse,
       token: token,
     });
   } catch (error) {
@@ -91,37 +98,40 @@ const loginController = async (req, res) => {
 
     if (!email || !password)
       return res.status(422).json({
-        message: "Email and password Required",
+        message: "Email and password are required",
       });
 
     const user = await UserModel.findOne({ email });
 
     if (!user)
-      return res.status(404).json({
-        message: "User not found",
+      return res.status(401).json({
+        message: "Invalid email or password",
       });
 
     let cp = await user.comparePass(password);
 
     if (!cp)
-      return res.status(400).json({
-        message: "incorrect email and password",
+      return res.status(401).json({
+        message: "Invalid email or password",
       });
 
     let token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 3600000, // 1 hour
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
     return res.status(200).json({
-      message: "User logged in",
-      user: user,
+      message: "Login successful",
+      user: userResponse,
       token: token,
     });
   } catch (error) {
@@ -184,19 +194,15 @@ const forgotPasswordController = async (req, res) => {
     // Create reset link
     let resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password/${resetToken}`;
 
-    // Send email
+    // Send email (non-blocking - don't fail request if email fails)
     let emailHTML = resetPassTemplate(user.name, resetLink);
-    try {
-      await sendMail(user.email, "Reset Your Password", emailHTML);
-    } catch (error) {
-      console.error("Error sending email:", error);
-      return res.status(500).json({
-        message: "Failed to send reset password email",
-      });
-    }
+    sendMail(user.email, "Reset Your Password", emailHTML).catch((error) => {
+      console.error("Error sending reset password email:", error);
+      // Don't fail the request if email fails
+    });
 
     return res.status(200).json({
-      message: "Reset password link has been sent to your email",
+      message: "Reset password link has been sent to your email. Link expires in 2 minutes.",
     });
   } catch (error) {
     console.error("Error in forgotPasswordController:", error);
@@ -248,7 +254,7 @@ const resetPasswordController = async (req, res) => {
     user.resetTokenExpire = null;
     await user.save();
 
-    // Send confirmation email
+    // Send confirmation email (non-blocking)
     let emailHTML = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
@@ -261,7 +267,9 @@ const resetPasswordController = async (req, res) => {
         </div>
       </div>
     `;
-    await sendMail(user.email, "Password Changed Successfully", emailHTML);
+    sendMail(user.email, "Password Changed Successfully", emailHTML).catch((error) => {
+      console.error("Error sending password reset confirmation email:", error);
+    });
 
     return res.status(200).json({
       message: "Password has been reset successfully. You can now login with your new password.",
@@ -277,7 +285,7 @@ const resetPasswordController = async (req, res) => {
 
 const updatePasswordController = async (req, res) => {
   try {
-    let user_id = req.user?._id || req.body.userId;
+    let user_id = req.user?._id;
     let { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!user_id)
@@ -320,7 +328,7 @@ const updatePasswordController = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    // Send confirmation email
+    // Send confirmation email (non-blocking)
     let emailHTML = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
@@ -333,7 +341,9 @@ const updatePasswordController = async (req, res) => {
         </div>
       </div>
     `;
-    await sendMail(user.email, "Password Updated Successfully", emailHTML);
+    sendMail(user.email, "Password Updated Successfully", emailHTML).catch((error) => {
+      console.error("Error sending password update confirmation email:", error);
+    });
 
     return res.status(200).json({
       message: "Password has been updated successfully",

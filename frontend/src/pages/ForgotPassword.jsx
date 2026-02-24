@@ -15,7 +15,11 @@ const ForgotPassword = () => {
 
     try {
       const res = await axiosInstance.post("/auth/user/forgot-password", { email });
-      toast.success(res.data.message || "Reset link has been sent to your email!");
+      if (res.data && res.data.message) {
+        toast.success(res.data.message);
+      } else {
+        toast.success("Reset link has been sent to your email!");
+      }
       setSubmitted(true);
       setEmail("");
       setTimeout(() => {

@@ -226,6 +226,7 @@ export const CartProvider = ({ children }) => {
 
       if (response.data.status) {
         setFavorites(response.data.favorites);
+        // Return the response so caller can check if it already existed
         return response.data;
       }
     } catch (error) {
@@ -249,6 +250,7 @@ export const CartProvider = ({ children }) => {
 
       if (response.data.status) {
         setFavorites(response.data.favorites);
+        return response.data;
       }
     } catch (error) {
       console.error("Error removing from favorites:", error);

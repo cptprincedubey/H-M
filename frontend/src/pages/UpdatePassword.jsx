@@ -60,7 +60,6 @@ const UpdatePassword = () => {
         currentPassword,
         newPassword,
         confirmPassword,
-        userId: user._id,
       });
       toast.success(res.data.message || "Password updated successfully!");
       setSubmitted(true);

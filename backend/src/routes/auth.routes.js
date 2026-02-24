@@ -11,6 +11,7 @@ const {
   meController,
 } = require("../controllers/auth.controller");
 const userSchemaValidationApi = require("../middlewares/authentication.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
@@ -19,8 +20,8 @@ router.post("/login", loginController);
 router.post("/logout", logoutController);
 router.post("/forgot-password", forgotPasswordController);
 router.post("/reset-password/:token", resetPasswordController);
-router.post("/update-password", updatePasswordController);
-router.get("/me", meController);
+router.post("/update-password", authMiddleware, updatePasswordController);
+router.get("/me", authMiddleware, meController);
 
 module.exports = router;
 

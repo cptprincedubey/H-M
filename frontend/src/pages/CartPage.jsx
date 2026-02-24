@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { Trash2, Plus, Minus } from "lucide-react";
 
 const CartPage = () => {
   const { cart, removeFromCart, updateCartItem, fetchCart } = useCart();
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [updatingItems, setUpdatingItems] = useState({});
 
@@ -171,6 +173,18 @@ const CartPage = () => {
           {/* Order Summary */}
           <div>
             <div className="bg-white border border-gray-200 p-4 sm:p-6 md:p-8 sticky top-20 sm:top-24">
+              {!user && (
+                <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                  <p className="text-sm text-blue-900 font-semibold mb-3">Login to complete your purchase</p>
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 font-bold uppercase text-sm tracking-wider rounded transition-all"
+                  >
+                    Login Now
+                  </button>
+                </div>
+              )}
+              
               <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">Summary</h2>
 
               <div className="space-y-4 mb-6 py-4 border-b border-gray-200">
@@ -194,7 +208,14 @@ const CartPage = () => {
               </div>
 
               <button
-                onClick={() => navigate("/checkout")}
+                onClick={() => {
+                  if (!user) {
+                    toast.error("Please login to proceed with checkout");
+                    navigate("/login");
+                    return;
+                  }
+                  navigate("/checkout");
+                }}
                 className="w-full bg-black text-white py-4 font-bold uppercase tracking-wider hover:bg-gray-800 transition-all mb-3"
               >
                 Proceed to Checkout

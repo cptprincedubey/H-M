@@ -37,9 +37,12 @@ const addToFavoritesController = async (req, res) => {
     );
 
     if (isFavorite) {
-      return res.status(400).json({
-        status: false,
+      // Return success with message instead of error
+      return res.status(200).json({
+        status: true,
         message: "Product already in favorites",
+        favorites: user.favorites,
+        alreadyExists: true,
       });
     }
 
@@ -58,6 +61,7 @@ const addToFavoritesController = async (req, res) => {
       status: true,
       message: "Added to favorites successfully",
       favorites: user.favorites,
+      alreadyExists: false,
     });
   } catch (error) {
     console.error("Error in addToFavoritesController:", error);

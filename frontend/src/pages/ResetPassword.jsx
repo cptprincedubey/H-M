@@ -31,7 +31,11 @@ const ResetPassword = () => {
         password,
         confirmPassword,
       });
-      toast.success(res.data.message || "Password reset successfully!");
+      if (res.data && res.data.message) {
+        toast.success(res.data.message);
+      } else {
+        toast.success("Password reset successfully!");
+      }
       setSubmitted(true);
       setPassword("");
       setConfirmPassword("");

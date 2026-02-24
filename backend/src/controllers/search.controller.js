@@ -5,12 +5,15 @@ const searchProductsController = async (req, res) => {
     const { query, category } = req.query;
 
     if (!query || query.trim().length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
+        status: false,
         message: "Search query is required",
+        productsData: [],
       });
     }
 
-    const searchRegex = new RegExp(query, "i"); // Case-insensitive search
+    const searchQuery = query.trim();
+    const searchRegex = new RegExp(searchQuery, "i"); // Case-insensitive search
 
     let searchFilter = {
       $or: [
@@ -21,22 +24,25 @@ const searchProductsController = async (req, res) => {
     };
 
     // If category is provided, add it to the filter
-    if (category) {
-      searchFilter.category = category;
+    if (category && category.trim().length > 0) {
+      searchFilter.category = new RegExp(category, "i");
     }
 
     const products = await ProductModel.find(searchFilter).limit(50);
 
     return res.status(200).json({
+      status: true,
       productsData: products,
       message: `Found ${products.length} product(s)`,
-      query: query,
+      query: searchQuery,
     });
   } catch (error) {
     console.log("error in search products api->", error);
-    return res.status(500).json({
-      message: "internal server error",
+    return res.status(200).json({
+      status: false,
+      message: "Error searching products",
       error: error.message,
+      productsData: [],
     });
   }
 };

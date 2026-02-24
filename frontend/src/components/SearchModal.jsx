@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { X, Search, Clock, TrendingUp } from "lucide-react";
 import { axiosInstance } from "../config/axiosInstance";
+import { toast } from "react-toastify";
 
 const SearchModal = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [searchHistory, setSearchHistory] = useState(() => {
     const saved = localStorage.getItem("searchHistory");
     return saved ? JSON.parse(saved) : [];
   });
-  const [popularSearches, setPopularSearches] = useState([
-    { name: "LADIES JACKET EDIT '25" },
-    { name: "SHIRT MEN" },
-    { name: "TOPS & T-SHIRTS KIDS" }
+  const [popularSearches] = useState([
+    { name: "LADIES JACKET" },
+    { name: "MEN SHIRTS" },
+    { name: "KIDS CLOTHING" }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
@@ -20,7 +23,6 @@ const SearchModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
-      fetchPopularSearches();
     }
   }, [isOpen]);
 
@@ -36,37 +38,37 @@ const SearchModal = ({ isOpen, onClose }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
 
-  const fetchPopularSearches = async () => {
-    try {
-      const res = await axiosInstance.get("/search/popular");
-      setPopularSearches(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const fetchSuggestions = async (query) => {
     setIsLoading(true);
     try {
-      const res = await axiosInstance.get(`/search/suggestions?q=${query}`);
-      setSuggestions(res.data);
+      const res = await axiosInstance.get(`/search/suggestions?q=${encodeURIComponent(query)}`);
+      if (Array.isArray(res.data)) {
+        setSuggestions(res.data);
+      } else {
+        setSuggestions([]);
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Suggestions error:", err);
+      setSuggestions([]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleSearch = (query) => {
-    if (!query.trim()) return;
-    
-    const newHistory = [query, ...searchHistory.filter(h => h !== query)].slice(0, 5);
+    if (!query || !query.trim()) {
+      toast.error("Please enter a search term");
+      return;
+    }
+
+    const trimmedQuery = query.trim();
+    const newHistory = [trimmedQuery, ...searchHistory.filter(h => h !== trimmedQuery)].slice(0, 5);
     setSearchHistory(newHistory);
     localStorage.setItem("searchHistory", JSON.stringify(newHistory));
-    
+
+    // Navigate to search results page
+    navigate(`/search?q=${encodeURIComponent(trimmedQuery)}`);
     onClose();
-    // navigate(`/search?q=${query}`); // Assuming a search results page exists or we filter current
-    console.log("Searching for:", query);
   };
 
   const clearHistory = () => {
@@ -107,6 +109,14 @@ const SearchModal = ({ isOpen, onClose }) => {
                 className="text-xs font-bold underline tracking-widest hover:text-gray-600"
               >
                 CLEAR
+              </button>
+            )}
+            {searchQuery && (
+              <button
+                onClick={() => handleSearch(searchQuery)}
+                className="ml-4 text-xs font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+              >
+                SEARCH
               </button>
             )}
           </div>
@@ -176,20 +186,24 @@ const SearchModal = ({ isOpen, onClose }) => {
                   <div className="text-xs tracking-widest text-gray-400">LOADING...</div>
                 ) : suggestions.length > 0 ? (
                   <div className="space-y-4">
-                    {suggestions.map((item) => (
-                      <button
-                        key={item._id}
-                        onClick={() => handleSearch(item.name)}
-                        className="group flex flex-col items-start w-full text-left"
-                      >
-                        <span className="text-sm font-medium uppercase tracking-widest group-hover:underline">
-                          {item.name}
-                        </span>
-                        <span className="text-[10px] text-gray-500 uppercase tracking-widest">
-                          in {item.category}
-                        </span>
-                      </button>
-                    ))}
+                    {suggestions.map((item, idx) => {
+                      const name = item.productName || item.name || "Unknown Product";
+                      const category = item.category || "Products";
+                      return (
+                        <button
+                          key={item._id || idx}
+                          onClick={() => handleSearch(name)}
+                          className="group flex flex-col items-start w-full text-left hover:text-black transition"
+                        >
+                          <span className="text-sm font-medium uppercase tracking-widest group-hover:underline">
+                            {name}
+                          </span>
+                          <span className="text-[10px] text-gray-500 uppercase tracking-widest">
+                            in {category}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="text-xs tracking-widest text-gray-400">NO RESULTS FOUND</div>

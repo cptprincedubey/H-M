@@ -18,6 +18,8 @@ import ResetPassword from "../pages/ResetPassword";
 import UpdatePassword from "../pages/UpdatePassword";
 import ProductDetails from "../pages/ProductDetails";
 import NotFoundPage from "../pages/NotFoundPage";
+import UserProfile from "../pages/UserProfile";
+import SearchResults from "../pages/SearchResults";
 import { AuthProvider } from "../context/AuthContext";
 import SellerDashboard from "../pages/SellerDashboard";
 
@@ -47,6 +49,8 @@ const router = createBrowserRouter([
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckoutPage /> },
       { path: "favorites", element: <FavoritesPage /> },
+      { path: "user-profile", element: <UserProfile /> },
+      { path: "search", element: <SearchResults /> },
       { path: "seller/login", element: <SellerLogin /> },
       { path: "seller/register", element: <SellerRegister /> },
       // Yahan se NotFound hataya gaya hai taaki dashboard tak pahuch sake

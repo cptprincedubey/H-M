@@ -18,15 +18,16 @@ const Login = () => {
     
     try {
       const res = await axiosInstance.post("/auth/user/login", { email, password });
-      if (res.data.user) {
+      if (res.data && res.data.user) {
         setUser(res.data.user);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("Login successful!");
-        // Refresh page to reload cart and favorites
+        toast.success(res.data.message || "Login successful!");
+        // Redirect to user profile after successful login
         setTimeout(() => {
-          navigate("/");
-          window.location.reload();
+          navigate("/user-profile");
         }, 500);
+      } else {
+        toast.error("Login failed. Please try again.");
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";

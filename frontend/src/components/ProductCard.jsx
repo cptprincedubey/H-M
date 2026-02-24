@@ -77,16 +77,21 @@ const ProductCard = ({ product }) => {
     try {
       setIsFavoriting(true);
       if (favorite) {
-        await removeFromFavorites(product._id);
+        await removeFromFavorites(productId);
         await fetchFavorites(); // Refresh favorites after removing
         toast.success("Removed from favourites");
       } else {
-        await addToFavorites(product._id, product);
+        const result = await addToFavorites(productId);
         await fetchFavorites(); // Refresh favorites after adding
-        toast.success("Added to favourites");
+        if (result?.alreadyExists) {
+          toast.info("Already in favourites");
+        } else {
+          toast.success("Added to favourites");
+        }
       }
     } catch (error) {
-      toast.error(error.message || "Please login to add favourites");
+      const errorMsg = error.response?.data?.message || error.message || "Could not update favourites";
+      toast.error(errorMsg);
     } finally {
       setIsFavoriting(false);
     }

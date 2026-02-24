@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-toastify";
 import { isRazorpayLoaded } from "../config/razorpayInstance";
@@ -8,6 +9,7 @@ import { isRazorpayLoaded } from "../config/razorpayInstance";
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cart, clearCart } = useCart();
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [razorpayReady, setRazorpayReady] = useState(false);
   const [formData, setFormData] = useState({
@@ -40,6 +42,14 @@ const CheckoutPage = () => {
     window.addEventListener('load', checkRazorpay);
     return () => window.removeEventListener('load', checkRazorpay);
   }, []);
+
+  // Check authentication
+  useEffect(() => {
+    if (!user) {
+      toast.error("Please login to continue shopping");
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     // Redirect if cart is empty

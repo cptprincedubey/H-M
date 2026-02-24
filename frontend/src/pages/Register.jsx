@@ -20,15 +20,16 @@ const Register = () => {
     
     try {
       const res = await axiosInstance.post("/auth/user/register", { name, email, phone, password });
-      if (res.data.user) {
+      if (res.data && res.data.user) {
         setUser(res.data.user);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("Registration successful!");
-        // Refresh page to initialize cart and favorites
+        toast.success(res.data.message || "Registration successful!");
+        // Redirect to user profile after successful registration
         setTimeout(() => {
-          navigate("/");
-          window.location.reload();
+          navigate("/user-profile");
         }, 500);
+      } else {
+        toast.error("Registration failed. Please try again.");
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Registration failed";
@@ -67,10 +68,17 @@ const Register = () => {
                 autoComplete="name"
                 placeholder="Enter your full name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z\s]*$/.test(value)) {
+                    setName(value);
+                  }
+                }}
                 required
                 minLength={4}
-                maxLength={30}
+                maxLength={50}
+                pattern="^[a-zA-Z\s]+$"
+                title="Name must contain only letters and spaces"
                 className="appearance-none relative block w-full px-4 py-3 border-2 border-gray-200 placeholder-gray-400 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm hover:border-gray-300"
               />
             </div>
@@ -121,7 +129,7 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                maxLength={10}
+                maxLength={128}
                 className="appearance-none relative block w-full px-4 py-3 border-2 border-gray-200 placeholder-gray-400 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm hover:border-gray-300"
               />
             </div>

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
 import SearchModal from "../components/SearchModal";
 import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 
 const HomeLayout = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cart, favorites } = useCart();
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -88,9 +90,13 @@ const HomeLayout = () => {
           >
             <Search className="text-gray-600 hover:text-black" size={18} />
           </button>
-          <NavLink to="/login" className="p-2 hover:bg-gray-100 rounded-full transition relative hidden sm:block">
+          <button
+            onClick={() => navigate(user ? "/user-profile" : "/login")}
+            className="p-2 hover:bg-gray-100 rounded-full transition relative hidden sm:block"
+            aria-label="Account"
+          >
             <User className="text-gray-600 hover:text-black" size={18} />
-          </NavLink>
+          </button>
           <button
             onClick={() => navigate("/favorites")}
             className="p-2 hover:bg-gray-100 rounded-full transition relative"
@@ -157,13 +163,15 @@ const HomeLayout = () => {
             >
               Beauty
             </NavLink>
-            <NavLink
-              to="/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-base font-medium text-gray-700 hover:text-black py-2 sm:hidden"
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                navigate(user ? "/user-profile" : "/login");
+              }}
+              className="text-base font-medium text-gray-700 hover:text-black py-2 sm:hidden w-full text-left"
             >
               Account
-            </NavLink>
+            </button>
           </div>
         </div>
       )}
