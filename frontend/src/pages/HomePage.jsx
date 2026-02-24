@@ -22,34 +22,32 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Promotional Banner */}
-      <div className="bg-black text-white text-center py-2 px-4">
-        <p className="text-sm">
-          Free shipping on orders over $40 | Free returns
-        </p>
-      </div>
-
-      {/* Hero Banner Section */}
-      <div className="relative w-full">
-        <div className="relative w-full h-125 md:h-150 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&h=900&fit=crop"
-            alt="Hero Banner"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">
-              NEW SEASON
-            </h1>
-            <p className="text-lg md:text-2xl mb-8 font-light">Fresh styles for a new you</p>
-            <Link
-              to="/ladies"
-              className="bg-white text-black px-10 py-4 text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase"
-            >
-              Shop Now
-            </Link>
-          </div>
+      {/* Hero Banner Section with Video - Full Width */}
+      <div className="hero-video-banner relative h-[250px] xs:h-[300px] sm:h-[400px] md:h-[500px]">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ width: '100%', height: '100%' }}
+        >
+          <source src="/hero-video.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+        {/* Dark Overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 z-10"></div>
+        {/* Text Content */}
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-center text-white px-4 z-20">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4 tracking-tight">
+            NEW SEASON
+          </h1>
+          <p className="text-base sm:text-xl md:text-2xl font-light">Fresh styles for a new you</p>
+          <Link
+            to="/ladies"
+            className="mt-4 bg-white text-black px-8 py-3 sm:px-10 sm:py-4 text-xs sm:text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase"
+          >
+            Shop Now
+          </Link>
         </div>
       </div>
 

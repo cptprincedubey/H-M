@@ -95,6 +95,26 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(1.05);
 }
 
+/* Hero Video Banner Styles */
+.hero-video-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #000;
+  display: block;
+}
+
+.hero-video-banner video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
 /* Product Card Animations */
 @keyframes fadeInUp {
   from {
