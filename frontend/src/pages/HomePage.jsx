@@ -116,11 +116,13 @@ const HomePage = () => {
 
       {/* Featured Banner */}
       <div className="relative w-full h-125 overflow-hidden mb-12">
-        <img
-          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop"
-          alt="Featured Collection"
+        <video
+          src="/hero-video.webm"
+          autoPlay
+          loop
+          muted
           className="w-full h-full object-cover"
-        />
+        ></video>
         <div className="absolute inset-0 bg-linear-to-r from-black to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 text-white max-w-xl">
           <h2 className="text-5xl font-bold mb-4 tracking-tight">TRENDING NOW</h2>
