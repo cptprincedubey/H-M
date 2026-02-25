@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchProductDataHook } from "../hooks/ladiesHook";
 import ProductCard from "../components/ProductCard";
@@ -11,6 +11,19 @@ const HomePage = () => {
     ...(ladiesData?.productsData?.slice(0, 4) || []),
     ...(menData?.productsData?.slice(0, 4) || []),
   ].slice(0, 8);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const playPromise = v.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch((err) => {
+        // Autoplay may be blocked by browser; keep video muted and log
+        console.warn('Hero video play prevented:', err);
+      });
+    }
+  }, []);
 
   if (ladiesPending || menPending) {
     return (
@@ -25,6 +38,7 @@ const HomePage = () => {
       {/* Hero Banner Section with Video - Full Width */}
       <div className="hero-video-banner relative h-[250px] xs:h-[300px] sm:h-[400px] md:h-[500px]">
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
