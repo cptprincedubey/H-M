@@ -20,8 +20,8 @@ const app = express();
 // Support multiple frontend URLs: production + development
 const allowedOrigins = [
   ...((process.env.FRONTEND_URL || "").split(",").map((url) => url.trim())),
-  "http://localhost:5173",
-  "http://localhost:5174",
+  "https://h-m-611n.vercel.app/",
+  "https://h-m-611n.vercel.app",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
 ].filter(Boolean);
