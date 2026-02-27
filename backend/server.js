@@ -14,9 +14,18 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
+// allow origins to be configured via environment so the app works both
+// locally and when deployed.  Render will set FRONTEND_URL (or you can add
+// the URL yourself) and we keep the localhost versions for development.
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+  "http://localhost:5174",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );

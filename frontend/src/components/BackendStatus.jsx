@@ -34,10 +34,10 @@ const BackendStatus = () => {
           <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
           <div className="flex-1">
             <p className="text-sm text-red-700 font-medium">
-              
+              Backend Server Offline
             </p>
             <p className="text-xs text-red-600 mt-1">
-              Please start the backend server on port 4500 to use authentication and other features.
+              Cannot connect to the backend server. Please check your connection and ensure the backend is running.
             </p>
           </div>
         </div>

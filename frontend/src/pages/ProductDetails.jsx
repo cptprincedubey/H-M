@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api/api";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -22,9 +22,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `http://localhost:5000/api/products/id/${id}`
-        );
+        const response = await API.get(`/products/id/${id}`);
         setProduct(response.data.product);
         setError(null);
         if (response.data.product?.sizes?.length > 0) {
