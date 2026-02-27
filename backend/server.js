@@ -17,11 +17,16 @@ const app = express();
 // allow origins to be configured via environment so the app works both
 // locally and when deployed.  Render will set FRONTEND_URL (or you can add
 // the URL yourself) and we keep the localhost versions for development.
+// Support multiple frontend URLs: production + development
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...((process.env.FRONTEND_URL || "").split(",").map((url) => url.trim())),
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
 ].filter(Boolean);
+
+console.log("📋 Allowed CORS origins:", allowedOrigins);
 
 app.use(
   cors({
