@@ -31,7 +31,7 @@ const LadiesPage = () => {
             Cannot connect to server
           </div>
           <div className="text-gray-500 text-sm mb-4">
-            Please make sure the backend server is running on port 4500
+            Unable to reach backend. Please check your internet connection or try again later.
           </div>
           <button
             onClick={() => window.location.reload()}

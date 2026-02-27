@@ -14,6 +14,10 @@ export const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    // log baseURL in development to help debugging
+    if (import.meta.env.DEV) {
+      console.debug("Axios request to", config.baseURL, config.url);
+    }
     return config;
   },
   (error) => {
