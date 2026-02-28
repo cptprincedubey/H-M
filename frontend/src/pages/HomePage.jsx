@@ -51,14 +51,14 @@ const HomePage = () => {
         {/* Dark Overlay */}
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 z-10"></div>
         {/* Text Content */}
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-center text-white px-4 z-20">
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4 tracking-tight">
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-center text-white px-3 xs:px-4 z-20">
+          <h1 className="text-2xl xs:text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4 tracking-tight">
             NEW SEASON
           </h1>
-          <p className="text-base sm:text-xl md:text-2xl font-light">Fresh styles for a new you</p>
+          <p className="text-xs xs:text-base sm:text-xl md:text-2xl font-light">Fresh styles for a new you</p>
           <Link
             to="/ladies"
-            className="mt-4 bg-white text-black px-8 py-3 sm:px-10 sm:py-4 text-xs sm:text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase"
+            className="mt-4 bg-white text-black px-6 xs:px-8 py-2 xs:py-3 sm:px-10 sm:py-4 text-xs xs:text-xs sm:text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase"
           >
             Shop Now
           </Link>
@@ -66,8 +66,8 @@ const HomePage = () => {
       </div>
 
       {/* Category Navigation Grid */}
-      <div className="max-w-400 mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="max-w-400 mx-auto px-3 xs:px-4 py-8 xs:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 xs:gap-4">
           <Link to="/ladies" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
               src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500&h=500&fit=crop"
@@ -115,7 +115,7 @@ const HomePage = () => {
       </div>
 
       {/* Featured Banner */}
-      <div className="relative w-full h-125 overflow-hidden mb-12">
+      <div className="relative w-full h-32 xs:h-60 sm:h-125 overflow-hidden mb-8 xs:mb-12">
         <video
           src="/hero-video.webm"
           autoPlay
@@ -124,12 +124,12 @@ const HomePage = () => {
           className="w-full h-full object-cover"
         ></video>
         <div className="absolute inset-0 bg-linear-to-r from-black to-transparent"></div>
-        <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 text-white max-w-xl">
-          <h2 className="text-5xl font-bold mb-4 tracking-tight">TRENDING NOW</h2>
-          <p className="text-lg mb-6 font-light">Discover our most-loved pieces this season</p>
+        <div className="absolute inset-0 flex flex-col justify-center px-4 xs:px-6 sm:px-8 md:px-16 text-white max-w-xl">
+          <h2 className="text-2xl xs:text-3xl sm:text-5xl font-bold mb-2 xs:mb-4 tracking-tight">TRENDING NOW</h2>
+          <p className="text-xs xs:text-sm sm:text-lg mb-4 xs:mb-6 font-light">Discover our most-loved pieces this season</p>
           <Link
             to="/"
-            className="bg-white text-black px-8 py-3 text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase inline-block w-fit"
+            className="bg-white text-black px-6 xs:px-8 py-2 xs:py-3 text-xs xs:text-sm font-bold tracking-wider hover:bg-gray-100 transition-all uppercase inline-block w-fit"
           >
             Explore
           </Link>
@@ -137,14 +137,14 @@ const HomePage = () => {
       </div>
 
       {/* Featured Products */}
-      <div className="max-w-400 mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Featured Products</h2>
+      <div className="max-w-400 mx-auto px-3 xs:px-4 py-8 xs:py-12">
+        <h2 className="text-2xl xs:text-3xl font-bold mb-6 xs:mb-8 uppercase tracking-wide">Featured Products</h2>
         {featuredProducts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No featured products available.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4 sm:gap-6">
             {featuredProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
@@ -153,22 +153,22 @@ const HomePage = () => {
       </div>
 
       {/* Magazine Style Section */}
-      <div className="bg-[#faf9f8] py-16">
-        <div className="max-w-400 mx-auto px-4">
+      <div className="bg-[#faf9f8] py-8 xs:py-12 sm:py-16">
+        <div className="max-w-400 mx-auto px-3 xs:px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="order-2 md:order-1">
               <img
                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=1000&fit=crop"
                 alt="Magazine Feature"
-                className="w-full h-150 object-cover"
+                className="w-full h-80 xs:h-96 sm:h-150 object-cover"
               />
             </div>
-            <div className="order-1 md:order-2 px-8">
-              <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">H&M MAGAZINE</h3>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
+            <div className="order-1 md:order-2 px-4 xs:px-6 sm:px-8">
+              <h3 className="text-xs xs:text-sm font-bold tracking-widest mb-3 xs:mb-4 text-gray-600">H&M MAGAZINE</h3>
+              <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold mb-4 xs:mb-6 tracking-tight leading-tight">
                 Style Guide:<br />Spring Essentials
               </h2>
-              <p className="text-lg mb-8 text-gray-700 leading-relaxed">
+              <p className="text-sm xs:text-base sm:text-lg mb-6 xs:mb-8 text-gray-700 leading-relaxed">
                 Discover the pieces you need to refresh your wardrobe this season. From timeless basics to statement pieces, we've curated the perfect collection.
               </p>
               <Link
@@ -183,19 +183,19 @@ const HomePage = () => {
       </div>
 
       {/* Sustainability Section */}
-      <div className="max-w-400 mx-auto px-4 py-16">
+      <div className="max-w-400 mx-auto px-3 xs:px-4 py-8 xs:py-12 sm:py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="px-8">
-            <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">SUSTAINABILITY</h3>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
+          <div className="px-4 xs:px-6 sm:px-8">
+            <h3 className="text-xs xs:text-sm font-bold tracking-widest mb-3 xs:mb-4 text-gray-600">SUSTAINABILITY</h3>
+            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold mb-4 xs:mb-6 tracking-tight leading-tight">
               Fashion for a<br />Better Future
             </h2>
-            <p className="text-lg mb-8 text-gray-700 leading-relaxed">
+            <p className="text-sm xs:text-base sm:text-lg mb-6 xs:mb-8 text-gray-700 leading-relaxed">
               We're committed to making fashion more sustainable. Explore our conscious collections made with eco-friendly materials and ethical practices.
             </p>
             <Link
               to="/home"
-              className="bg-black text-white px-8 py-3 text-sm font-bold tracking-wider hover:bg-gray-800 transition-all uppercase inline-block"
+              className="bg-black text-white px-6 xs:px-8 py-2 xs:py-3 text-xs xs:text-sm font-bold tracking-wider hover:bg-gray-800 transition-all uppercase inline-block"
             >
               Learn More
             </Link>
@@ -204,26 +204,26 @@ const HomePage = () => {
             <img
               src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&h=1000&fit=crop"
               alt="Sustainability"
-              className="w-full h-150 object-cover"
+              className="w-full h-80 xs:h-96 sm:h-150 object-cover"
             />
           </div>
         </div>
       </div>
 
       {/* Home Décor Section - Exact H&M Layout */}
-      <div className="bg-white py-16">
-        <div className="max-w-300 mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-white py-8 xs:py-12 sm:py-16">
+        <div className="max-w-300 mx-auto px-3 xs:px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 xs:gap-8">
             {/* Text Content - Left Side */}
             <div className="flex flex-col justify-start">
-              <h2 className="text-4xl font-bold mb-6 uppercase tracking-wide text-black">
+              <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold mb-4 xs:mb-6 uppercase tracking-wide text-black">
                 Home Décor
               </h2>
-              <div className="space-y-4">
-                <p className="text-base leading-relaxed text-black">
+              <div className="space-y-3 xs:space-y-4">
+                <p className="text-sm xs:text-base leading-relaxed text-black">
                   Level up your interior aesthetics with our home décor range. Whether you've moved into a new home, or you want to breathe new life into your existing living space, our collection has every room in the house covered.
                 </p>
-                <p className="text-base leading-relaxed text-black">
+                <p className="text-sm xs:text-base leading-relaxed text-black">
                   Our furniture edit offers stunning side tables and comfy lounge chairs, plus there's an array of chic lighting to create a calming ambience. Looking for those finishing touches? Check out our beautiful{" "}
                   <a href="#" className="underline hover:no-underline">
                     bed linen
@@ -238,7 +238,7 @@ const HomePage = () => {
                   </a>
                   .
                 </p>
-                <p className="text-base leading-relaxed text-black">
+                <p className="text-sm xs:text-base leading-relaxed text-black">
                   When it comes to decorations, add scented candles to your bathroom, give your favorite plants a place to call home in our chic plant pots, or experiment with wall hangings and elegant glassware. Whether your preferred style is minimalistic or bold, we've got something to suit every taste in our home décor range.
                 </p>
               </div>
@@ -257,7 +257,7 @@ const HomePage = () => {
               <img
                 src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=600&fit=crop"
                 alt="Home Décor Products"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto object-cover rounded-sm mt-6 xs:mt-0"
               />
             </div>
           </div>
@@ -265,10 +265,10 @@ const HomePage = () => {
       </div>
 
       {/* Newsletter Section */}
-      <div className="bg-black text-white py-16">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4 tracking-tight">BECOME AN H&M MEMBER</h2>
-          <p className="text-lg mb-8 font-light">
+      <div className="bg-black text-white py-8 xs:py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto px-3 xs:px-4 text-center">
+          <h2 className="text-2xl xs:text-3xl font-bold mb-3 xs:mb-4 tracking-tight">BECOME AN H&M MEMBER</h2>
+          <p className="text-sm xs:text-base sm:text-lg mb-6 xs:mb-8 font-light">
             Join now and get 10% off your first purchase! Plus, enjoy member-exclusive offers and early access to sales.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center max-w-xl mx-auto">
@@ -279,13 +279,13 @@ const HomePage = () => {
       </div>
 
       {/* Footer - Exact H&M Structure */}
-      <div className="bg-white py-12 border-t border-gray-200">
-        <div className="max-w-400 mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+      <div className="bg-white py-8 xs:py-10 sm:py-12 border-t border-gray-200">
+        <div className="max-w-400 mx-auto px-3 xs:px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xs:gap-6 sm:gap-8 mb-8 xs:mb-12">
             {/* Shop Column */}
             <div>
-              <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">SHOP</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="text-xs xs:text-sm font-bold mb-2 xs:mb-4 uppercase tracking-wide">SHOP</h3>
+              <ul className="space-y-1 xs:space-y-2 text-xs xs:text-sm">
                 <li><Link to="/ladies" className="hover:underline">LADIES</Link></li>
                 <li><Link to="/men" className="hover:underline">MEN</Link></li>
                 <li><Link to="/kids" className="hover:underline">KIDS</Link></li>
@@ -296,8 +296,8 @@ const HomePage = () => {
 
             {/* Corporate Info Column */}
             <div>
-              <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">CORPORATE INFO</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="text-xs xs:text-sm font-bold mb-2 xs:mb-4 uppercase tracking-wide">CORPORATE INFO</h3>
+              <ul className="space-y-1 xs:space-y-2 text-xs xs:text-sm">
                 <li><Link to="/home" className="hover:underline">CAREER AT H&M</Link></li>
                 <li><Link to="/home" className="hover:underline">ABOUT H&M GROUP</Link></li>
                 <li><Link to="/home" className="hover:underline">SUSTAINABILITY H&M GROUP</Link></li>
@@ -309,8 +309,8 @@ const HomePage = () => {
 
             {/* Help Column */}
             <div>
-              <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">HELP</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="text-xs xs:text-sm font-bold mb-2 xs:mb-4 uppercase tracking-wide">HELP</h3>
+              <ul className="space-y-1 xs:space-y-2 text-xs xs:text-sm">
                 <li><Link to="/home" className="hover:underline">CUSTOMER SERVICE</Link></li>
                 <li><Link to="/login" className="hover:underline">MY H&M</Link></li>
                 <li><Link to="/home" className="hover:underline">FIND A STORE</Link></li>
@@ -324,8 +324,8 @@ const HomePage = () => {
 
             {/* Newsletter Signup Column */}
             <div>
-              <h3 className="text-sm font-bold mb-4 uppercase tracking-wide">SIGN UP NOW</h3>
-              <p className="text-sm mb-4">
+              <h3 className="text-xs xs:text-sm font-bold mb-2 xs:mb-4 uppercase tracking-wide">SIGN UP NOW</h3>
+              <p className="text-xs xs:text-sm mb-3 xs:mb-4">
                 Sign up now and be the first to know about exclusive offers, latest fashion news & style tips!
               </p>
               <Link to="/register" className="text-sm font-bold underline hover:no-underline uppercase">
@@ -335,9 +335,9 @@ const HomePage = () => {
           </div>
 
           {/* Footer Bottom */}
-          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200">
-            <div className="mb-4 md:mb-0">
-              <p className="text-sm flex items-center gap-2">
+          <div className="flex flex-col md:flex-row justify-between items-center pt-6 xs:pt-8 border-t border-gray-200 gap-4 md:gap-0">
+            <div className="mb-0">
+              <p className="text-xs xs:text-sm flex items-center gap-2 flex-wrap justify-center md:justify-start">
                 <span className="font-bold">INDIA (Rs.)</span>
                 <Link to="/home" className="underline hover:no-underline">CHANGE REGION</Link>
               </p>
@@ -363,8 +363,8 @@ const HomePage = () => {
           </div>
 
           {/* Copyright */}
-          <div className="text-center mt-8 pt-8 border-t border-gray-200">
-            <p className="text-xs text-gray-600">
+          <div className="text-center mt-6 xs:mt-8 pt-6 xs:pt-8 border-t border-gray-200">
+            <p className="text-xs text-gray-600 leading-relaxed">
               The content of this site is copyright-protected and is the property of H & M Hennes & Mauritz AB.
             </p>
           </div>
