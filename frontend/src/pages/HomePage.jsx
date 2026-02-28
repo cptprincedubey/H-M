@@ -11,18 +11,50 @@ const HomePage = () => {
     ...(ladiesData?.productsData?.slice(0, 4) || []),
     ...(menData?.productsData?.slice(0, 4) || []),
   ].slice(0, 8);
-  const videoRef = useRef(null);
+  
+  const heroVideoRef = useRef(null);
+  const bannerVideoRef = useRef(null);
 
+  // Better video handling for mobile browsers
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const playPromise = v.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch((err) => {
-        // Autoplay may be blocked by browser; keep video muted and log
-        console.warn('Hero video play prevented:', err);
-      });
-    }
+    const handleVideoPlay = (videoElement) => {
+      if (!videoElement) return;
+      
+      // Ensure video is muted for autoplay
+      videoElement.muted = true;
+      
+      const playPromise = videoElement.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise
+          .then(() => {
+            console.log('Video playing successfully');
+          })
+          .catch((err) => {
+            console.warn('Video play error:', err);
+            // Retry after a short delay
+            setTimeout(() => {
+              videoElement.play().catch(e => console.warn('Retry failed:', e));
+            }, 500);
+          });
+      }
+      
+      // Restart video when it ends to ensure looping on mobile
+      const handleEnded = () => {
+        videoElement.currentTime = 0;
+        videoElement.play().catch(e => console.warn('Loop restart failed:', e));
+      };
+      
+      videoElement.addEventListener('ended', handleEnded);
+      return () => videoElement.removeEventListener('ended', handleEnded);
+    };
+
+    const heroUnsubscribe = handleVideoPlay(heroVideoRef.current);
+    const bannerUnsubscribe = handleVideoPlay(bannerVideoRef.current);
+
+    return () => {
+      if (heroUnsubscribe) heroUnsubscribe();
+      if (bannerUnsubscribe) bannerUnsubscribe();
+    };
   }, []);
 
   if (ladiesPending || menPending) {
@@ -38,13 +70,15 @@ const HomePage = () => {
       {/* Hero Banner Section with Video - Full Width */}
       <div className="hero-video-banner relative h-[250px] xs:h-[300px] sm:h-[400px] md:h-[500px]">
         <video
-          ref={videoRef}
+          ref={heroVideoRef}
           autoPlay
           muted
           loop
           playsInline
-          style={{ width: '100%', height: '100%' }}
+          preload="metadata"
+          style={{ width: '100%', height: '100%', display: 'block' }}
         >
+          <source src="/hero-video.mp4" type="video/mp4" />
           <source src="/hero-video.webm" type="video/webm" />
           Your browser does not support the video tag.
         </video>
@@ -117,12 +151,17 @@ const HomePage = () => {
       {/* Featured Banner */}
       <div className="relative w-full h-32 xs:h-60 sm:h-125 overflow-hidden mb-8 xs:mb-12">
         <video
-          src="/hero-video.webm"
+          ref={bannerVideoRef}
           autoPlay
           loop
           muted
+          playsInline
+          preload="metadata"
           className="w-full h-full object-cover"
-        ></video>
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+          <source src="/hero-video.webm" type="video/webm" />
+        </video>
         <div className="absolute inset-0 bg-linear-to-r from-black to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-center px-4 xs:px-6 sm:px-8 md:px-16 text-white max-w-xl">
           <h2 className="text-2xl xs:text-3xl sm:text-5xl font-bold mb-2 xs:mb-4 tracking-tight">TRENDING NOW</h2>
