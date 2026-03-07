@@ -314,6 +314,7 @@ const SellerDashboard = () => {
       const res = await axiosInstance.get(`/products/seller`);
       setProducts(res?.data?.productsData || []);
     } catch {
+      setProducts([]);
       toast.error("Failed to load products");
     } finally {
       setLoading(false);
