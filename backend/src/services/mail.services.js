@@ -7,13 +7,23 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 
 // Create transporter with SMTP configuration
 const createTransporter = () => {
+  // trim credentials to avoid trailing/leading spaces
+  const emailUser = process.env.EMAIL_USER ? process.env.EMAIL_USER.trim() : '';
+  const emailPass = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.trim() : '';
+  if (process.env.EMAIL_USER && process.env.EMAIL_USER !== emailUser) {
+    console.warn('⚠️ EMAIL_USER had extra whitespace; trimmed it');
+  }
+  if (process.env.EMAIL_PASS && process.env.EMAIL_PASS !== emailPass) {
+    console.warn('⚠️ EMAIL_PASS had extra whitespace; trimmed it');
+  }
+
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: emailUser,
+      pass: emailPass,
     },
     tls: {
       rejectUnauthorized: false,

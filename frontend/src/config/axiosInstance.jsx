@@ -4,7 +4,11 @@ import { toast } from "react-toastify";
 // Fallback backend URL if env var is not set
 const DEFAULT_BACKEND_URL = "https://h-m-vcs4.onrender.com";
 
-const backendUrl = (import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL).replace(/\/+$/g, "");
+// trim whitespace and remove trailing slashes
+const backendUrl = (import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL).
+  toString()
+  .trim()
+  .replace(/\/+$/g, "");
 
 if (import.meta.env.DEV) {
   console.log("Backend URL configured:", backendUrl);

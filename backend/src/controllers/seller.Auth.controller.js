@@ -6,6 +6,8 @@ const registerSellerController = async (req, res) => {
     let { sellerName, sellerPhone, sellerEmail, sellerAadhaar, password } =
       req.body;
 
+    sellerEmail = String(sellerEmail || '').trim().toLowerCase();
+
     let existingSeller = await SellerModel.findOne({
       sellerEmail,
     });
@@ -77,6 +79,7 @@ const registerSellerController = async (req, res) => {
 const sellerLoginController = async (req, res) => {
   try {
     let { sellerEmail, password } = req.body;
+    sellerEmail = String(sellerEmail || '').trim().toLowerCase();
 
     let seller = await SellerModel.findOne({ sellerEmail });
 

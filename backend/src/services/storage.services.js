@@ -34,7 +34,8 @@ const sendFiles = async (fileBuffer, fileName) => {
   const outPath = path.join(uploadsDir, safeName);
   await fs.promises.writeFile(outPath, fileBuffer);
 
-  const port = process.env.PORT || process.env.port || 4500;
+  // use actual port if server adjusted it, otherwise env or default
+  const port = process.env.ACTUAL_PORT || process.env.PORT || process.env.port || 4500;
   const url = `http://localhost:${port}/uploads/${safeName}`;
   return { url };
 };

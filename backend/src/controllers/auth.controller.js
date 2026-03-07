@@ -101,6 +101,7 @@ const loginController = async (req, res) => {
         message: "Email and password are required",
       });
 
+    email = String(email).trim().toLowerCase();
     const user = await UserModel.findOne({ email });
 
     if (!user)
@@ -173,6 +174,7 @@ const forgotPasswordController = async (req, res) => {
       return res.status(400).json({
         message: "Email is required",
       });
+    email = String(email).trim().toLowerCase();
 
     let user = await UserModel.findOne({ email });
 
@@ -191,8 +193,12 @@ const forgotPasswordController = async (req, res) => {
     user.resetTokenExpire = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
     await user.save();
 
-    // Create reset link
-    let resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password/${resetToken}`;
+    // Create reset link; trim whitespace and strip trailing slash if present
+    let baseUrl = (process.env.FRONTEND_URL || "http://localhost:5173").trim();
+    if (baseUrl.endsWith("/")) {
+      baseUrl = baseUrl.slice(0, -1);
+    }
+    let resetLink = `${baseUrl}/reset-password/${resetToken}`;
 
     // Build HTML and send email.  We await and return error if send fails so
     // caller (and logs) know about it.  Gmail sometimes drops mail in spam,

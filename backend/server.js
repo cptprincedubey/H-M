@@ -1,4 +1,5 @@
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
+console.log("Loaded .env from", require("path").join(__dirname, ".env"));
 const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./src/routes/auth.routes");
@@ -93,20 +94,51 @@ app.use((err, req, res, next) => {
 });
 
 // Get port from environment variable (uppercase PORT or lowercase port)
-const port = process.env.PORT || process.env.port || 4500;
+let port = parseInt(process.env.PORT || process.env.port, 10) || 4500;
 
-// Start server
-app.listen(port, () => {
-  console.log(`\n✅ Server is running on port ${port}`);
-  console.log(`📍 Health check: http://localhost:${port}/api/health`);
-  console.log(`🔗 API Base URL: http://localhost:${port}/api\n`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`\n❌ Error: Port ${port} is already in use!`);
-    console.error(`   Please either:`);
-    console.error(`   1. Stop the process using port ${port}`);
-    console.error(`   2. Change the PORT in .env file to a different port\n`);
-  } else {
+// log missing critical environment variables early
+const requiredEnvs = [
+  'mongo_uri',
+  'JWT_SECRET',
+  'JWT_SELLER_SECRET',
+  'EMAIL_USER',
+  'EMAIL_PASS',
+];
+requiredEnvs.forEach((name) => {
+  if (!process.env[name]) {
+    console.warn(`⚠️ Environment variable ${name} is not set`);
+  }
+});
+
+// helper to start server and automatically try next port on conflict
+const startServer = async (startPort, attempts = 0) => {
+  try {
+    await new Promise((resolve, reject) => {
+      const s = app
+        .listen(startPort, () => resolve(s))
+        .on('error', reject);
+    });
+    console.log(`\n✅ Server is running on port ${startPort}`);
+    // export actual port for other modules (e.g. storage URL generator)
+    process.env.ACTUAL_PORT = startPort;
+    console.log(`📍 Health check: http://localhost:${startPort}/api/health`);
+    console.log(`🔗 API Base URL: http://localhost:${startPort}/api\n`);
+  } catch (err) {
+    if (err.code === 'EADDRINUSE' && attempts < 5) {
+      console.warn(`\n⚠️ Port ${startPort} is already in use, trying ${startPort + 1}`);
+      startServer(startPort + 1, attempts + 1);
+    } else if (err.code === 'EADDRINUSE') {
+      console.error(`\n❌ Unable to find an open port after multiple attempts.`);
+      process.exit(1);
+    } else {
+      console.error('Server failed to start:', err);
+      process.exit(1);
+    }
+  }
+};
+
+// Start the server with automatic port fallback
+startServer(port);
     console.error(`\n❌ Server error:`, err);
   }
   process.exit(1);

@@ -22,9 +22,9 @@ const processPaymentController = async (req, res) => {
       });
     }
 
-    // Validate Razorpay keys are configured
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-      console.error("Razorpay keys not configured in environment variables");
+    // Validate Razorpay instance is available
+    if (!razorpayInstance) {
+      console.error("Razorpay instance not initialized; check keys");
       return res.status(500).json({
         status: false,
         message: "Payment gateway configuration error",
@@ -56,6 +56,7 @@ const processPaymentController = async (req, res) => {
     };
 
     const order = await razorpayInstance.orders.create(options);
+    // note: if razorpayInstance is misconfigured this will throw; we catch below
 
     if (!order || !order.id) {
       return res.status(500).json({

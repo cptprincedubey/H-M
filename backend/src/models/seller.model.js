@@ -21,6 +21,8 @@ const sellerSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     sellerAadhaar: {
       type: String,
