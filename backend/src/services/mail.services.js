@@ -1,5 +1,10 @@
 const nodemailer = require("nodemailer");
 
+// warn if credentials missing
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  console.warn("EMAIL_USER or EMAIL_PASS not set – email functionality will fail.");
+}
+
 // Create transporter with SMTP configuration
 const createTransporter = () => {
   const transporter = nodemailer.createTransport({

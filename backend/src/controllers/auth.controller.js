@@ -198,23 +198,21 @@ const forgotPasswordController = async (req, res) => {
     // caller (and logs) know about it.  Gmail sometimes drops mail in spam,
     // and credentials must be valid app‑passwords (no spaces!).
     let emailHTML = resetPassTemplate(user.name, resetLink);
-    try {
-      const info = await sendMail(user.email, "Reset Your Password", emailHTML);
-      console.log("Forgot-password email info:", info);
-    } catch (err) {
-      console.error("Error sending reset password email:", err);
-      // respond with success anyway but warn client so UI can display message
-      // note: we still send 200 because token was created; email delivery is
-      // best‑effort.  In development you can check console for link.
-      return res.status(200).json({
-        message:
-          "Reset link generated but failed to send email. Check server logs for details.",
-        debug: err.message,
-      });
-    }
 
-    return res.status(200).json({
+    // respond immediately so client isn't held up by email delivery
+    res.status(200).json({
       message: "Reset password link has been sent to your email. Link expires in 2 minutes.",
+    });
+
+    // perform email send asynchronously; log result
+    setImmediate(async () => {
+      try {
+        const info = await sendMail(user.email, "Reset Your Password", emailHTML);
+        console.log("Forgot-password email sent async:", info.messageId);
+      } catch (err) {
+        console.error("Async error sending reset password email:", err);
+        // maybe notify admin or retry later
+      }
     });
   } catch (error) {
     console.error("Error in forgotPasswordController:", error);
