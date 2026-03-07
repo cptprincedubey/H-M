@@ -111,35 +111,25 @@ requiredEnvs.forEach((name) => {
 });
 
 // helper to start server and automatically try next port on conflict
-const startServer = async (startPort, attempts = 0) => {
-  try {
-    await new Promise((resolve, reject) => {
-      const s = app
-        .listen(startPort, () => resolve(s))
-        .on('error', reject);
-    });
+const startServer = (startPort, attempts = 0) => {
+  const server = app.listen(startPort, () => {
     console.log(`\n✅ Server is running on port ${startPort}`);
     // export actual port for other modules (e.g. storage URL generator)
     process.env.ACTUAL_PORT = startPort;
     console.log(`📍 Health check: http://localhost:${startPort}/api/health`);
     console.log(`🔗 API Base URL: http://localhost:${startPort}/api\n`);
-  } catch (err) {
+  });
+
+  server.on('error', (err) => {
     if (err.code === 'EADDRINUSE' && attempts < 5) {
       console.warn(`\n⚠️ Port ${startPort} is already in use, trying ${startPort + 1}`);
       startServer(startPort + 1, attempts + 1);
-    } else if (err.code === 'EADDRINUSE') {
-      console.error(`\n❌ Unable to find an open port after multiple attempts.`);
-      process.exit(1);
     } else {
       console.error('Server failed to start:', err);
       process.exit(1);
     }
-  }
+  });
 };
 
 // Start the server with automatic port fallback
 startServer(port);
-    console.error(`\n❌ Server error:`, err);
-  }
-  process.exit(1);
-});
