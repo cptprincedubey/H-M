@@ -87,7 +87,7 @@ const KidsPage = () => {
 
           <Link to="/kids/shoes" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
-              src="https://images.unsplash.com/photo-1514590242912-47a0d8e0d3c8?w=500&h=500&fit=crop"
+              src="https://images.unsplash.com/photo-1503449377594-32dd9ac4467c?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Shoes"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
