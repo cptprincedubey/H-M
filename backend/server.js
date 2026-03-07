@@ -110,6 +110,21 @@ requiredEnvs.forEach((name) => {
   }
 });
 
+// Check critical variables and exit if missing
+const mongoUri = process.env.mongo_uri || process.env.MONGO_URI || process.env.DATABASE_URL;
+if (!mongoUri) {
+  console.error('❌ CRITICAL: MongoDB URI not found. Set mongo_uri, MONGO_URI, or DATABASE_URL in environment variables.');
+  process.exit(1);
+}
+if (!process.env.JWT_SECRET) {
+  console.error('❌ CRITICAL: JWT_SECRET not set. Required for authentication.');
+  process.exit(1);
+}
+if (!process.env.JWT_SELLER_SECRET) {
+  console.error('❌ CRITICAL: JWT_SELLER_SECRET not set. Required for seller authentication.');
+  process.exit(1);
+}
+
 // helper to start server and automatically try next port on conflict
 const startServer = (startPort, attempts = 0) => {
   const server = app.listen(startPort, () => {
