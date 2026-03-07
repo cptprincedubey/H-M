@@ -3,31 +3,149 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-toastify";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
+// ─── Responsive hook ──────────────────────────────────────────────────────────
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const fn = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return width;
+};
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
 const Icon = ({ d, size = 20, color = "currentColor" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
     stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
     <path d={d} />
   </svg>
 );
-const PlusIcon = () => <Icon d="M12 5v14M5 12h14" />;
-const TrashIcon = () => <Icon d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" />;
-const EditIcon = () => <Icon d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />;
-const LogoutIcon = () => <Icon d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />;
+const PlusIcon    = () => <Icon d="M12 5v14M5 12h14" />;
+const TrashIcon   = () => <Icon d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" />;
+const EditIcon    = () => <Icon d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />;
+const LogoutIcon  = () => <Icon d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />;
 const PackageIcon = () => <Icon d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />;
-const ImageIcon = () => <Icon d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14l4-4h12zM8.5 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />;
-const XIcon = () => <Icon d="M18 6L6 18M6 6l12 12" />;
+const ImageIcon   = () => <Icon d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14l4-4h12zM8.5 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />;
+const XIcon       = () => <Icon d="M18 6L6 18M6 6l12 12" />;
+const MenuIcon    = () => <Icon d="M3 12h18M3 6h18M3 18h18" />;
 
-// ─── Category options ─────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 const CATEGORIES = ["ladies", "men", "kids", "beauty"];
 const CURRENCIES = ["INR", "USD", "EUR"];
-
-// ─── Empty form state ─────────────────────────────────────────────────────────
-const emptyForm = {
+const emptyForm  = {
   productName: "", amount: "", currency: "INR",
   description: "", category: "ladies",
   size: "", color: "",
 };
+
+// ─── Injected global CSS ──────────────────────────────────────────────────────
+const GlobalStyles = () => (
+  <style>{`
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    * { box-sizing: border-box; }
+
+    .seller-sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      animation: fadeIn 0.2s ease;
+    }
+    .seller-sidebar-overlay.open { display: block; }
+
+    .seller-sidebar {
+      width: 220px;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+      z-index: 210;
+    }
+
+    /* Mobile sidebar: slide-in drawer */
+    @media (max-width: 768px) {
+      .seller-sidebar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        animation: none;
+      }
+      .seller-sidebar.open {
+        transform: translateX(0);
+        animation: slideIn 0.25s ease;
+      }
+      .seller-main {
+        padding: 20px 16px !important;
+      }
+      .seller-topbar {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .seller-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+      }
+      .seller-modal-grid2 {
+        grid-template-columns: 1fr !important;
+      }
+      .seller-filter-row {
+        overflow-x: auto;
+        padding-bottom: 4px;
+        flex-wrap: nowrap !important;
+      }
+      .seller-filter-row::-webkit-scrollbar { display: none; }
+      .seller-add-btn span { display: inline !important; }
+    }
+
+    @media (max-width: 480px) {
+      .seller-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      .seller-card-actions {
+        flex-direction: column !important;
+      }
+      .seller-modal {
+        border-radius: 12px !important;
+        margin: 0 !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .seller-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    .seller-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #111;
+      padding: 4px;
+    }
+    @media (max-width: 768px) {
+      .seller-hamburger { display: flex; align-items: center; }
+    }
+
+    /* Desktop: hide hamburger, show sidebar inline */
+    @media (min-width: 769px) {
+      .seller-sidebar { transform: translateX(0) !important; position: sticky; }
+    }
+  `}</style>
+);
 
 // ─── Product Form Modal ───────────────────────────────────────────────────────
 const ProductModal = ({ onClose, onSave, editProduct }) => {
@@ -40,9 +158,9 @@ const ProductModal = ({ onClose, onSave, editProduct }) => {
     size: (editProduct.sizes || []).join(", "),
     color: (editProduct.colors || []).join(", "),
   } : emptyForm);
-  const [files, setFiles] = useState([]);
+  const [files, setFiles]       = useState([]);
   const [previews, setPreviews] = useState(editProduct?.images || []);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]   = useState(false);
   const fileRef = useRef();
 
   const handleFile = (e) => {
@@ -91,7 +209,7 @@ const ProductModal = ({ onClose, onSave, editProduct }) => {
 
   return (
     <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modal} onClick={e => e.stopPropagation()}>
+      <div className="seller-modal" style={styles.modal} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div style={styles.modalHeader}>
           <span style={styles.modalTitle}>{editProduct ? "Edit Product" : "Add New Product"}</span>
@@ -100,10 +218,7 @@ const ProductModal = ({ onClose, onSave, editProduct }) => {
 
         <form onSubmit={handleSubmit} style={styles.form}>
           {/* Image Upload */}
-          <div
-            style={styles.uploadArea}
-            onClick={() => fileRef.current.click()}
-          >
+          <div style={styles.uploadArea} onClick={() => fileRef.current.click()}>
             {previews.length > 0 ? (
               <div style={styles.previewGrid}>
                 {previews.map((src, i) => (
@@ -120,8 +235,8 @@ const ProductModal = ({ onClose, onSave, editProduct }) => {
               onChange={handleFile} style={{ display: "none" }} />
           </div>
 
-          {/* Fields */}
-          <div style={styles.grid2}>
+          {/* Fields grid — collapses to 1-col on mobile via className */}
+          <div className="seller-modal-grid2" style={styles.grid2}>
             <div style={styles.field}>
               <label style={styles.label}>Product Name *</label>
               <input style={styles.input} value={form.productName} required
@@ -181,20 +296,21 @@ const ProductModal = ({ onClose, onSave, editProduct }) => {
 
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 const SellerDashboard = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [products, setProducts]     = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [showModal, setShowModal]   = useState(false);
   const [editProduct, setEditProduct] = useState(null);
-  const [filterCat, setFilterCat] = useState("all");
+  const [filterCat, setFilterCat]   = useState("all");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const width = useWindowWidth();
+  const isMobile = width <= 768;
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // Fetch products that belong to the logged-in seller
       const res = await axiosInstance.get(`/products/seller`);
-      const list = res?.data?.productsData || [];
-      setProducts(list);
+      setProducts(res?.data?.productsData || []);
     } catch {
       toast.error("Failed to load products");
     } finally {
@@ -203,6 +319,11 @@ const SellerDashboard = () => {
   };
 
   useEffect(() => { fetchProducts(); }, []);
+
+  // Close sidebar on desktop resize
+  useEffect(() => {
+    if (!isMobile) setSidebarOpen(false);
+  }, [isMobile]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
@@ -224,171 +345,214 @@ const SellerDashboard = () => {
     navigate("/seller/login");
   };
 
-  const filtered = filterCat === "all" ? products : products.filter(p => p.category === filterCat);
+  const openModal = (product = null) => {
+    setEditProduct(product);
+    setShowModal(true);
+  };
+
+  const filtered = filterCat === "all"
+    ? products
+    : products.filter(p => p.category === filterCat);
 
   return (
-    <div style={styles.page}>
-      {/* Sidebar */}
-      <aside style={styles.sidebar}>
-        <div style={styles.logo}>
-          <span style={styles.logoText}>H&M</span>
-          <span style={styles.logoSub}>Seller Panel</span>
-        </div>
+    <>
+      <GlobalStyles />
+      <div style={styles.page}>
 
-        <nav style={styles.nav}>
-          <div style={styles.navItem}>
-            <PackageIcon />
-            <span>Products</span>
+        {/* Mobile sidebar backdrop */}
+        <div
+          className={`seller-sidebar-overlay${sidebarOpen ? " open" : ""}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+
+        {/* Sidebar */}
+        <aside className={`seller-sidebar${sidebarOpen ? " open" : ""}`}>
+          <div style={styles.logo}>
+            <span style={styles.logoText}>H&M</span>
+            <span style={styles.logoSub}>Seller Panel</span>
           </div>
-        </nav>
-
-        <button onClick={handleLogout} style={styles.logoutBtn}>
-          <LogoutIcon />
-          <span>Logout</span>
-        </button>
-      </aside>
-
-      {/* Main */}
-      <main style={styles.main}>
-        {/* Top bar */}
-        <div style={styles.topbar}>
-          <div>
-            <h1 style={styles.pageTitle}>My Products</h1>
-            <p style={styles.pageSubtitle}>{products.length} products total</p>
-          </div>
-          <button onClick={() => { setEditProduct(null); setShowModal(true); }} style={styles.addBtn}>
-            <PlusIcon />
-            <span>Add Product</span>
+          <nav style={styles.nav}>
+            <div style={styles.navItem}>
+              <PackageIcon />
+              <span>Products</span>
+            </div>
+          </nav>
+          <button onClick={handleLogout} style={styles.logoutBtn}>
+            <LogoutIcon />
+            <span>Logout</span>
           </button>
-        </div>
+        </aside>
 
-        {/* Category filter */}
-        <div style={styles.filterRow}>
-          {["all", ...CATEGORIES].map(cat => (
-            <button key={cat} onClick={() => setFilterCat(cat)}
-              style={{ ...styles.filterBtn, ...(filterCat === cat ? styles.filterBtnActive : {}) }}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
-        </div>
+        {/* Main content */}
+        <main className="seller-main" style={styles.main}>
 
-        {/* Products Grid */}
-        {loading ? (
-          <div style={styles.center}>
-            <div style={styles.spinner} />
-            <p style={{ marginTop: 16, color: "#888" }}>Loading products...</p>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div style={styles.empty}>
-            <PackageIcon />
-            <p style={{ marginTop: 12, color: "#888" }}>No products found.</p>
-            <button onClick={() => { setEditProduct(null); setShowModal(true); }} style={styles.addBtn}>
-              <PlusIcon /> Add First Product
-            </button>
-          </div>
-        ) : (
-          <div style={styles.grid}>
-            {filtered.map(product => (
-              <div key={product._id} style={styles.card}>
-                <div style={styles.cardImg}>
-                  {product.images?.[0] ? (
-                    <img src={product.images[0]} alt={product.productName} style={styles.img} />
-                  ) : (
-                    <div style={styles.noImg}><ImageIcon /></div>
-                  )}
-                  <span style={styles.categoryBadge}>{product.category}</span>
-                </div>
-                <div style={styles.cardBody}>
-                  <h3 style={styles.productName}>{product.productName}</h3>
-                  <p style={styles.productPrice}>
-                    {product.price?.currency} {product.price?.amount?.toLocaleString()}
-                  </p>
-                  <p style={styles.productDesc}>
-                    {product.description?.slice(0, 70)}{product.description?.length > 70 ? "..." : ""}
-                  </p>
-                  <div style={styles.tags}>
-                    {(product.sizes || []).slice(0, 4).map(s => (
-                      <span key={s} style={styles.tag}>{s}</span>
-                    ))}
-                  </div>
-                </div>
-                <div style={styles.cardActions}>
-                  <button onClick={() => { setEditProduct(product); setShowModal(true); }} style={styles.editBtn}>
-                    <EditIcon /> Edit
-                  </button>
-                  <button onClick={() => handleDelete(product._id)} style={styles.deleteBtn}>
-                    <TrashIcon /> Delete
-                  </button>
-                </div>
+          {/* Top bar */}
+          <div className="seller-topbar" style={styles.topbar}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {/* Hamburger — only visible on mobile via CSS */}
+              <button
+                className="seller-hamburger"
+                onClick={() => setSidebarOpen(true)}
+                aria-label="Open menu"
+              >
+                <MenuIcon />
+              </button>
+              <div>
+                <h1 style={styles.pageTitle}>My Products</h1>
+                <p style={styles.pageSubtitle}>{products.length} products total</p>
               </div>
+            </div>
+            <button
+              className="seller-add-btn"
+              onClick={() => openModal(null)}
+              style={styles.addBtn}
+            >
+              <PlusIcon />
+              <span>Add Product</span>
+            </button>
+          </div>
+
+          {/* Category filter */}
+          <div className="seller-filter-row" style={styles.filterRow}>
+            {["all", ...CATEGORIES].map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilterCat(cat)}
+                style={{
+                  ...styles.filterBtn,
+                  ...(filterCat === cat ? styles.filterBtnActive : {}),
+                }}
+              >
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
             ))}
           </div>
-        )}
-      </main>
 
-      {/* Modal */}
-      {showModal && (
-        <ProductModal
-          onClose={() => { setShowModal(false); setEditProduct(null); }}
-          onSave={fetchProducts}
-          editProduct={editProduct}
-        />
-      )}
-    </div>
+          {/* Product grid */}
+          {loading ? (
+            <div style={styles.center}>
+              <div style={styles.spinner} />
+              <p style={{ marginTop: 16, color: "#888" }}>Loading products...</p>
+            </div>
+          ) : filtered.length === 0 ? (
+            <div style={styles.empty}>
+              <PackageIcon />
+              <p style={{ marginTop: 12, color: "#888" }}>No products found.</p>
+              <button onClick={() => openModal(null)} style={styles.addBtn}>
+                <PlusIcon /> Add First Product
+              </button>
+            </div>
+          ) : (
+            <div className="seller-grid" style={styles.grid}>
+              {filtered.map(product => (
+                <div key={product._id} style={styles.card}>
+                  <div style={styles.cardImg}>
+                    {product.images?.[0] ? (
+                      <img src={product.images[0]} alt={product.productName} style={styles.img} />
+                    ) : (
+                      <div style={styles.noImg}><ImageIcon /></div>
+                    )}
+                    <span style={styles.categoryBadge}>{product.category}</span>
+                  </div>
+                  <div style={styles.cardBody}>
+                    <h3 style={styles.productName}>{product.productName}</h3>
+                    <p style={styles.productPrice}>
+                      {product.price?.currency} {product.price?.amount?.toLocaleString()}
+                    </p>
+                    <p style={styles.productDesc}>
+                      {product.description?.slice(0, 70)}{product.description?.length > 70 ? "..." : ""}
+                    </p>
+                    <div style={styles.tags}>
+                      {(product.sizes || []).slice(0, 4).map(s => (
+                        <span key={s} style={styles.tag}>{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="seller-card-actions" style={styles.cardActions}>
+                    <button onClick={() => openModal(product)} style={styles.editBtn}>
+                      <EditIcon /> Edit
+                    </button>
+                    <button onClick={() => handleDelete(product._id)} style={styles.deleteBtn}>
+                      <TrashIcon /> Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+
+        {/* Modal */}
+        {showModal && (
+          <ProductModal
+            onClose={() => { setShowModal(false); setEditProduct(null); }}
+            onSave={fetchProducts}
+            editProduct={editProduct}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = {
-  page: { display: "flex", minHeight: "100vh", background: "#f5f5f5", fontFamily: "'Helvetica Neue', Arial, sans-serif" },
-  sidebar: { width: 220, background: "#111", color: "#fff", display: "flex", flexDirection: "column", padding: "24px 16px", position: "sticky", top: 0, height: "100vh" },
+  page: {
+    display: "flex",
+    minHeight: "100vh",
+    background: "#f5f5f5",
+    fontFamily: "'Helvetica Neue', Arial, sans-serif",
+    position: "relative",
+    overflow: "hidden",
+  },
+  // Sidebar base styles — responsive behaviour handled via CSS classes above
   logo: { display: "flex", flexDirection: "column", marginBottom: 40, paddingBottom: 20, borderBottom: "1px solid #333" },
   logoText: { fontSize: 28, fontWeight: 900, letterSpacing: 2, color: "#fff" },
   logoSub: { fontSize: 11, color: "#888", letterSpacing: 3, marginTop: 2, textTransform: "uppercase" },
   nav: { flex: 1 },
   navItem: { display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: "#222", color: "#fff", fontSize: 14, fontWeight: 500, cursor: "pointer" },
-  logoutBtn: { display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: "transparent", color: "#888", border: "1px solid #333", cursor: "pointer", fontSize: 14, transition: "all .2s" },
-  main: { flex: 1, padding: "32px 40px", overflowY: "auto" },
-  topbar: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 },
-  pageTitle: { fontSize: 26, fontWeight: 800, color: "#111", margin: 0 },
-  pageSubtitle: { fontSize: 13, color: "#888", marginTop: 4 },
-  addBtn: { display: "flex", alignItems: "center", gap: 8, background: "#111", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer" },
+  logoutBtn: { display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: "transparent", color: "#888", border: "1px solid #333", cursor: "pointer", fontSize: 14 },
+  main: { flex: 1, padding: "32px 40px", overflowY: "auto", minWidth: 0 },
+  topbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28, flexWrap: "wrap", gap: 12 },
+  pageTitle: { fontSize: 24, fontWeight: 800, color: "#111", margin: 0 },
+  pageSubtitle: { fontSize: 13, color: "#888", marginTop: 4, margin: 0 },
+  addBtn: { display: "flex", alignItems: "center", gap: 8, background: "#111", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" },
   filterRow: { display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" },
-  filterBtn: { padding: "6px 16px", borderRadius: 20, border: "1px solid #ddd", background: "#fff", fontSize: 13, cursor: "pointer", fontWeight: 500, color: "#555" },
+  filterBtn: { padding: "6px 16px", borderRadius: 20, border: "1px solid #ddd", background: "#fff", fontSize: 13, cursor: "pointer", fontWeight: 500, color: "#555", whiteSpace: "nowrap", flexShrink: 0 },
   filterBtnActive: { background: "#111", color: "#fff", borderColor: "#111" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 20 },
+  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 },
   card: { background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", display: "flex", flexDirection: "column" },
-  cardImg: { position: "relative", height: 200, background: "#f0f0f0" },
+  cardImg: { position: "relative", height: 180, background: "#f0f0f0", flexShrink: 0 },
   img: { width: "100%", height: "100%", objectFit: "cover" },
   noImg: { display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#ccc" },
   categoryBadge: { position: "absolute", top: 10, left: 10, background: "#111", color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 4, textTransform: "uppercase", letterSpacing: 1 },
-  cardBody: { padding: "14px 16px", flex: 1 },
-  productName: { fontSize: 15, fontWeight: 700, color: "#111", margin: "0 0 4px" },
-  productPrice: { fontSize: 14, fontWeight: 600, color: "#e00", margin: "0 0 8px" },
-  productDesc: { fontSize: 12, color: "#777", lineHeight: 1.5, margin: "0 0 10px" },
+  cardBody: { padding: "12px 14px", flex: 1 },
+  productName: { fontSize: 14, fontWeight: 700, color: "#111", margin: "0 0 4px", lineHeight: 1.3 },
+  productPrice: { fontSize: 14, fontWeight: 600, color: "#e00", margin: "0 0 6px" },
+  productDesc: { fontSize: 12, color: "#777", lineHeight: 1.5, margin: "0 0 8px" },
   tags: { display: "flex", gap: 4, flexWrap: "wrap" },
   tag: { background: "#f0f0f0", padding: "2px 8px", borderRadius: 4, fontSize: 11, color: "#555" },
-  cardActions: { display: "flex", gap: 8, padding: "12px 16px", borderTop: "1px solid #f0f0f0" },
+  cardActions: { display: "flex", gap: 8, padding: "10px 14px", borderTop: "1px solid #f0f0f0" },
   editBtn: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px", borderRadius: 6, border: "1px solid #ddd", background: "#fff", fontSize: 13, cursor: "pointer", fontWeight: 500 },
   deleteBtn: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px", borderRadius: 6, border: "1px solid #fee", background: "#fff5f5", color: "#e00", fontSize: 13, cursor: "pointer", fontWeight: 500 },
   center: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: 300 },
   empty: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: 300, gap: 12, color: "#ccc" },
   spinner: { width: 36, height: 36, border: "3px solid #eee", borderTop: "3px solid #111", borderRadius: "50%", animation: "spin 0.8s linear infinite" },
   // Modal
-  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 },
+  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 },
   modal: { background: "#fff", borderRadius: 16, width: "100%", maxWidth: 620, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: "1px solid #f0f0f0" },
-  modalTitle: { fontSize: 18, fontWeight: 700, color: "#111" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 20px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 1 },
+  modalTitle: { fontSize: 17, fontWeight: 700, color: "#111" },
   iconBtn: { background: "none", border: "none", cursor: "pointer", color: "#888", display: "flex" },
-  form: { padding: 24, display: "flex", flexDirection: "column", gap: 16 },
-  uploadArea: { border: "2px dashed #ddd", borderRadius: 10, minHeight: 120, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", background: "#fafafa" },
+  form: { padding: "20px", display: "flex", flexDirection: "column", gap: 14 },
+  uploadArea: { border: "2px dashed #ddd", borderRadius: 10, minHeight: 110, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", background: "#fafafa" },
   uploadPlaceholder: { display: "flex", flexDirection: "column", alignItems: "center", color: "#ccc" },
   previewGrid: { display: "flex", gap: 8, padding: 8, flexWrap: "wrap" },
-  previewImg: { width: 80, height: 80, objectFit: "cover", borderRadius: 6 },
+  previewImg: { width: 76, height: 76, objectFit: "cover", borderRadius: 6 },
   grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
   field: { display: "flex", flexDirection: "column", gap: 4 },
-  label: { fontSize: 12, fontWeight: 600, color: "#555", textTransform: "uppercase", letterSpacing: 0.5 },
-  input: { padding: "10px 12px", border: "1.5px solid #e0e0e0", borderRadius: 8, fontSize: 14, outline: "none", color: "#111", background: "#fff", fontFamily: "inherit" },
+  label: { fontSize: 11, fontWeight: 600, color: "#555", textTransform: "uppercase", letterSpacing: 0.5 },
+  input: { padding: "10px 12px", border: "1.5px solid #e0e0e0", borderRadius: 8, fontSize: 14, outline: "none", color: "#111", background: "#fff", fontFamily: "inherit", width: "100%" },
   submitBtn: { background: "#111", color: "#fff", border: "none", borderRadius: 8, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer", marginTop: 4 },
 };
 
