@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../config/axiosInstance";
+import { axiosInstance, setSellerToken } from "../config/axiosInstance";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 // ─── Responsive hook ──────────────────────────────────────────────────────────
 const useWindowWidth = () => {
@@ -303,6 +304,7 @@ const SellerDashboard = () => {
   const [filterCat, setFilterCat]   = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const { setSeller, setSellerToken: setContextToken } = useAuth();
   const width = useWindowWidth();
   const isMobile = width <= 768;
 
@@ -342,6 +344,9 @@ const SellerDashboard = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Logout failed");
     }
+    setSeller(null);
+    setContextToken(null);
+    setSellerToken(null);
     navigate("/seller/login");
   };
 

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { axiosInstance } from "../config/axiosInstance";
+import { axiosInstance, setSellerToken } from "../config/axiosInstance";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 import BackendStatus from "../components/BackendStatus";
 
 const SellerLogin = () => {
@@ -9,6 +10,7 @@ const SellerLogin = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { setSeller, setSellerToken: setContextToken } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,7 +18,10 @@ const SellerLogin = () => {
     
     try {
       const res = await axiosInstance.post("/auth/seller/login", { sellerEmail, password });
-      if (res.data.seller) {
+      if (res.data.seller && res.data.token) {
+        setSeller(res.data.seller);
+        setContextToken(res.data.token);
+        setSellerToken(res.data.token);
         toast.success("Seller login successful!");
         navigate("/seller/dashboard");
       }

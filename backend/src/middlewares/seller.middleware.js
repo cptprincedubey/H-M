@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const sellerMiddleware = async (req, res, next) => {
   try {
-    let seller_token = req.cookies.sellerToken;
+    let seller_token = req.cookies.sellerToken || req.headers.authorization?.replace('Bearer ', '');
 
     if (!seller_token)
       return res.status(401).json({

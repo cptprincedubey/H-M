@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { axiosInstance } from "../config/axiosInstance";
+import { axiosInstance, setSellerToken } from "../config/axiosInstance";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 import BackendStatus from "../components/BackendStatus";
 
 const SellerRegister = () => {
@@ -12,6 +13,7 @@ const SellerRegister = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { setSeller, setSellerToken: setContextToken } = useAuth();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -25,9 +27,12 @@ const SellerRegister = () => {
         sellerAadhaar,
         password,
       });
-      if (res.data.seller) {
+      if (res.data.seller && res.data.token) {
+        setSeller(res.data.seller);
+        setContextToken(res.data.token);
+        setSellerToken(res.data.token);
         toast.success("Seller registration successful!");
-        navigate("/");
+        navigate("/seller/dashboard");
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Registration failed";

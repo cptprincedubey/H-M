@@ -11,6 +11,15 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Function to set seller token
+export const setSellerToken = (token) => {
+  if (token) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axiosInstance.defaults.headers.common['Authorization'];
+  }
+};
+
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {

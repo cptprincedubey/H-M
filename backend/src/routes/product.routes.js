@@ -12,17 +12,16 @@ const sellerMiddleware = require("../middlewares/seller.middleware");
 
 const router = express.Router();
 
-// Search route (must be before /:category route)
+
 router.get("/search", searchProductsController);
 router.post("/create", sellerMiddleware, upload.array("images", 5), createProductController);
 
-// Seller-specific products
+
 router.get("/seller", sellerMiddleware, require("../controllers/product.controller").getSellerProductsController);
 
-// Single product by ID - matches any ID string
+
 router.get("/id/:id", getSingleProductController);
 
-// Category products - catches all other single-word requests (ladies, men, kids, beauty, etc)
 router.get("/:category", getAllProductsDataController);
 router.put(
   "/update/:id",
