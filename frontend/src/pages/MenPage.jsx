@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getProductByCategory } from "../api/ProductApis";
-
+import ProductCard from "../components/ProductCard";
 
 const MenPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("men");
+  const [products, setProducts] = useState([]);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState(null);
 
   const categories = [
-    { id: "all", name: "All" },
+    { id: "men", name: "All" },
     { id: "shirts", name: "Shirts" },
     { id: "tshirts", name: "T-shirts & Tanks" },
     { id: "jeans", name: "Jeans" },
@@ -16,10 +19,85 @@ const MenPage = () => {
     { id: "accessories", name: "Accessories" },
   ];
 
+  useEffect(() => {
+    let mounted = true;
+    setIsPending(true);
+    setError(null);
+
+    const fetchProducts = async () => {
+      try {
+        const data = await getProductByCategory(selectedCategory);
+        if (mounted) {
+          const rawProducts = data?.productsData || [];
+          const filteredProducts = Array.isArray(rawProducts)
+            ? rawProducts.filter((p) => p && (p._id != null || p.id != null))
+            : [];
+          setProducts(filteredProducts);
+          if (data?.message === "Cannot connect to server") {
+            setError(data.message);
+          }
+        }
+      } catch (err) {
+        if (mounted) {
+          setError("Failed to fetch products");
+          setProducts([]);
+        }
+      } finally {
+        if (mounted) setIsPending(false);
+      }
+    };
+
+    fetchProducts();
+    return () => { mounted = false };
+  }, [selectedCategory]);
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-xl sm:text-2xl font-semibold">Loading...</div>
+      </div>
+    );
+  }
+
+  const hasNetworkError = error === "Cannot connect to server" && products.length === 0;
+
+  if (hasNetworkError) {
+    return (
+      <div className="flex justify-center items-center min-h-screen px-4">
+        <div className="text-center">
+          <div className="text-red-500 text-lg sm:text-xl mb-2">
+            Cannot connect to server
+          </div>
+          <div className="text-gray-500 text-sm mb-4">
+            Unable to reach backend. Please check your internet connection or try again later.
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !hasNetworkError) {
+    return (
+      <div className="flex justify-center items-center min-h-screen px-4">
+        <div className="text-center">
+          <div className="text-red-500 text-lg sm:text-xl mb-2">
+            Error: {error}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Banner */}
-      <div className="relative w-full h-125 overflow-hidden mb-12">
+      <div className="relative w-full h-[250px] xs:h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden mb-4 sm:mb-6 md:mb-12">
         <img
           src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600&h=900&fit=crop"
           alt="Men Collection"
@@ -27,13 +105,13 @@ const MenPage = () => {
         />
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">MEN</h1>
-          <p className="text-xl md:text-2xl font-light">Style meets comfort</p>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4 tracking-tight">MEN</h1>
+          <p className="text-base sm:text-xl md:text-2xl font-light">Style meets comfort</p>
         </div>
       </div>
 
       {/* Category Filters */}
-      <div className="max-w-400 mx-auto px-4 mb-12">
+      <div className="max-w-[1600px] mx-auto px-4 mb-12">
         <div className="flex flex-wrap gap-4 mb-8 pb-6 border-b border-gray-200">
           {categories.map((category) => (
             <button
@@ -51,9 +129,25 @@ const MenPage = () => {
         </div>
       </div>
 
-      {/* Shop by Category Grid */}
-      <div className="max-w-400 mx-auto px-4 mb-16">
-        <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Shop by Category</h2>
+      {/* Products Grid */}
+      <div className="container mx-auto px-4 py-4 sm:py-8 mb-12">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 uppercase tracking-wide">Men's Collection</h1>
+        {products.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-base sm:text-lg">No products found in this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+            {products.map((elem) => (
+              <ProductCard key={elem._id} product={elem} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Shop by Category Grid - Hidden on mobile, shown on larger screens */}
+      <div className="max-w-[1600px] mx-auto px-4 mb-16 hidden md:block">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 uppercase tracking-wide">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link to="/men/shirts" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
             <img
@@ -147,7 +241,7 @@ const MenPage = () => {
 
       {/* Featured Banner - New Arrivals */}
       <div className="bg-[#faf9f8] py-16 mb-16">
-        <div className="max-w-400 mx-auto px-4">
+        <div className="max-w-[1600px] mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="px-8">
               <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">NEW ARRIVALS</h3>
@@ -168,26 +262,26 @@ const MenPage = () => {
               <img
                 src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&h=800&fit=crop"
                 alt="New Arrivals"
-                className="w-full h-150 object-cover"
+                className="w-full h-[400px] object-cover"
               />
             </div>
           </div>
         </div>
       </div>
       {/* Featured Products */}
-      <div className="max-w-400 mx-auto px-4 py-16 mb-16">
+      <div className="max-w-[1600px] mx-auto px-4 py-16 mb-16">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Featured Products</h2>
         <FeaturedGrid category="men" />
       </div>
 
       {/* Trending Section */}
-      <div className="max-w-400 mx-auto px-4 py-16 mb-16">
+      <div className="max-w-[1600px] mx-auto px-4 py-16 mb-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
             <img
               src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=800&h=800&fit=crop"
               alt="Denim Collection"
-              className="w-full h-150 object-cover"
+              className="w-full h-[400px] object-cover"
             />
           </div>
           <div className="px-8">
@@ -210,7 +304,7 @@ const MenPage = () => {
 
       {/* Info Section */}
       <div className="bg-white py-12">
-        <div className="max-w-300 mx-auto px-4">
+        <div className="max-w-[1200px] mx-auto px-4">
           <h2 className="text-3xl font-bold mb-6 uppercase tracking-wide">Men's Fashion at H&M</h2>
           <div className="space-y-4 text-base leading-relaxed text-gray-800">
             <p>
