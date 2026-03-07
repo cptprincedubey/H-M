@@ -124,19 +124,6 @@ const sellerLoginController = async (req, res) => {
   }
 };
 
-const sellerLogoutController = async (req, res) => {
-  try {
-    // Clear the seller cookie
-    res.clearCookie("sellerToken");
-    return res.status(200).json({ message: "Seller logged out" });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error",
-      error: error,
-    });
-  }
-};
-
 const getSellerProfileController = async (req, res) => {
   try {
     let sellerProfile = req.seller;
