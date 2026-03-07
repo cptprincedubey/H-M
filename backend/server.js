@@ -7,6 +7,7 @@ const sellerAuthRoutes = require("./src/routes/seller.Auth.routes");
 const paymentRoutes = require("./src/routes/payment.routes");
 const cartRoutes = require("./src/routes/cart.routes");
 const favoritesRoutes = require("./src/routes/favorites.routes");
+const searchRoutes = require("./src/routes/search.routes");
 
 const connectDB = require("./src/config/db");
 const cookieParser = require("cookie-parser");
@@ -80,6 +81,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/favorites", favoritesRoutes);
+app.use("/api/search", searchRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

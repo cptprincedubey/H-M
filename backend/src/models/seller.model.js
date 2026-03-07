@@ -39,9 +39,16 @@ const sellerSchema = new mongoose.Schema(
 );
 
 sellerSchema.pre("save", async function (next) {
-  let hashedPass = await bcrypt.hash(this.password, 10);
-  this.password = hashedPass;
-  next();
+  if (!this.isModified("password")) {
+    return next();
+  }
+  try {
+    let hashedPass = await bcrypt.hash(this.password, 10);
+    this.password = hashedPass;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 sellerSchema.methods.comparePass = async function (password) {
