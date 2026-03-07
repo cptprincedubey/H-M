@@ -40,7 +40,7 @@ const BackendStatus = () => {
         <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-lg">
           <div className="flex items-start justify-between">
             <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-red-500 mr-3 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm text-red-700 font-semibold">
                   Cannot Connect to Server

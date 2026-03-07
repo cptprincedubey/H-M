@@ -166,7 +166,7 @@ const UserProfile = () => {
                         <label className="block text-xs font-bold uppercase tracking-widest text-gray-700 mb-2">
                           Email Address
                         </label>
-                        <p className="text-base md:text-lg text-gray-900 font-semibold break-words">{user.email}</p>
+                        <p className="text-base md:text-lg text-gray-900 font-semibold break-word">{user.email}</p>
                       </div>
 
                       {isEditing && (
@@ -234,7 +234,7 @@ const UserProfile = () => {
                   </div>
 
                   {/* H&M Membership Section */}
-                  <div className="bg-gradient-to-r from-gray-900 to-black text-white p-4 md:p-6 lg:p-8 rounded-lg shadow-lg">
+                  <div className="bg-linear-to-r from-gray-900 to-black text-white p-4 md:p-6 lg:p-8 rounded-lg shadow-lg">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 md:mb-6 gap-4">
                       <div>
                         <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight mb-2">Premium Member</h3>

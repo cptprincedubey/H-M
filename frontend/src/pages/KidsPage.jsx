@@ -16,7 +16,7 @@ const KidsPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Banner */}
-      <div className="relative w-full h-[400px] overflow-hidden mb-8">
+      <div className="relative w-full h-96 overflow-hidden mb-8">
         <img
           src="https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=1600&h=600&fit=crop"
           alt="Kids Collection"
@@ -30,7 +30,7 @@ const KidsPage = () => {
       </div>
 
       {/* Age Group Filters */}
-      <div className="max-w-[1600px] mx-auto px-4 mb-8">
+      <div className="max-w-7xl mx-auto px-4 mb-8">
         <div className="flex flex-wrap gap-4 mb-8 pb-6 border-b border-gray-200">
           {ageGroups.map((age) => (
             <button
@@ -49,7 +49,7 @@ const KidsPage = () => {
       </div>
 
       {/* Category Grid */}
-      <div className="max-w-[1600px] mx-auto px-4 mb-12">
+      <div className="max-w-7xl mx-auto px-4 mb-12">
         <h2 className="text-2xl font-bold mb-6 uppercase tracking-wide">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link to="/kids/girls" className="group relative overflow-hidden bg-[#faf9f8] aspect-square">
@@ -100,7 +100,7 @@ const KidsPage = () => {
 
       {/* Featured Section */}
       <div className="bg-[#faf9f8] py-16 mb-12">
-        <div className="max-w-[1600px] mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="px-8">
               <h3 className="text-sm font-bold tracking-widest mb-4 text-gray-600">BACK TO SCHOOL</h3>
@@ -121,7 +121,7 @@ const KidsPage = () => {
               <img
                 src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=600&fit=crop"
                 alt="Back to School"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-96 object-cover"
               />
             </div>
           </div>
@@ -129,13 +129,13 @@ const KidsPage = () => {
       </div>
 
       {/* Featured Products */}
-      <div className="max-w-[1600px] mx-auto px-4 py-16 mb-12">
+      <div className="max-w-7xl mx-auto px-4 py-16 mb-12">
         <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">Featured Products</h2>
         <FeaturedGrid category="kids" />
       </div>
 
       {/* Info Section */}
-      <div className="max-w-[1200px] mx-auto px-4 py-12 mb-12">
+      <div className="max-w-6xl mx-auto px-4 py-12 mb-12">
         <h2 className="text-3xl font-bold mb-6 uppercase tracking-wide">Kids Fashion at H&M</h2>
         <div className="space-y-4 text-base leading-relaxed text-gray-800">
           <p>

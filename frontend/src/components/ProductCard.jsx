@@ -202,7 +202,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="group relative bg-white w-full">
       {/* Product Image */}
-      <div className="relative overflow-hidden aspect-[3/4] bg-gray-100 cursor-pointer" onClick={handleProductClick}>
+      <div className="relative overflow-hidden aspect-3/4 bg-gray-100 cursor-pointer" onClick={handleProductClick}>
         <img
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           src={product?.images?.[0] || "https://via.placeholder.com/300"}
@@ -254,7 +254,7 @@ const ProductCard = ({ product }) => {
 
       {/* Product Info */}
       <div className="mt-2 sm:mt-3 px-1">
-        <h3 className="text-xs sm:text-sm font-medium mb-1 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] cursor-pointer hover:text-blue-600" onClick={handleProductClick}>
+        <h3 className="text-xs sm:text-sm font-medium mb-1 line-clamp-2 min-h-8 sm:min-h-10 cursor-pointer hover:text-blue-600" onClick={handleProductClick}>
           {product?.productName}
         </h3>
         <div className="flex items-center justify-between flex-wrap gap-2">
