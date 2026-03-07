@@ -1,12 +1,19 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// Fallback backend URL if env var is not set
+const DEFAULT_BACKEND_URL = "https://h-m-vcs4.onrender.com";
+
+const backendUrl = (import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL).replace(/\/+$/g, "");
+
+if (import.meta.env.DEV) {
+  console.log("Backend URL configured:", backendUrl);
+}
+
 export const axiosInstance = axios.create({
-  // Ensure the backend url doesn’t end with a slash so we don’t end up with
+  // Ensure the backend url doesn't end with a slash so we don't end up with
   // `https://example.com//api` which can result in 404s on some hosts.
-  baseURL:
-    (import.meta.env.VITE_BACKEND_URL || "").replace(/\/+$/g, "") +
-    "/api",
+  baseURL: backendUrl + "/api",
   timeout: 15000,
   withCredentials: true,
 });
