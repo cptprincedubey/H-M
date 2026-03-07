@@ -24,6 +24,13 @@ const createTransporter = () => {
 
 const transporter = createTransporter();
 
+// Immediately verify connection when module loads - helps surface
+// configuration issues early in logs.  Will not block startup.
+transporter.verify().then(() => {
+  console.log("Mail transporter verified");
+}).catch(err => {
+  console.error("Mail transporter verification failed:", err);
+});
 const sendMail = async (to, subject, html) => {
   try {
     // Test the connection
@@ -35,6 +42,10 @@ const sendMail = async (to, subject, html) => {
       to: to,
       subject: subject,
       html: html,
+      // include replyTo and bcc so messages are easier to track and won't be
+      // dropped by Gmail when sending to the same address
+      replyTo: process.env.EMAIL_USER,
+      bcc: process.env.EMAIL_USER,
     };
 
     console.log("Sending email to:", to);

@@ -194,12 +194,24 @@ const forgotPasswordController = async (req, res) => {
     // Create reset link
     let resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password/${resetToken}`;
 
-    // Send email (non-blocking - don't fail request if email fails)
+    // Build HTML and send email.  We await and return error if send fails so
+    // caller (and logs) know about it.  Gmail sometimes drops mail in spam,
+    // and credentials must be valid app‑passwords (no spaces!).
     let emailHTML = resetPassTemplate(user.name, resetLink);
-    sendMail(user.email, "Reset Your Password", emailHTML).catch((error) => {
-      console.error("Error sending reset password email:", error);
-      // Don't fail the request if email fails
-    });
+    try {
+      const info = await sendMail(user.email, "Reset Your Password", emailHTML);
+      console.log("Forgot-password email info:", info);
+    } catch (err) {
+      console.error("Error sending reset password email:", err);
+      // respond with success anyway but warn client so UI can display message
+      // note: we still send 200 because token was created; email delivery is
+      // best‑effort.  In development you can check console for link.
+      return res.status(200).json({
+        message:
+          "Reset link generated but failed to send email. Check server logs for details.",
+        debug: err.message,
+      });
+    }
 
     return res.status(200).json({
       message: "Reset password link has been sent to your email. Link expires in 2 minutes.",
