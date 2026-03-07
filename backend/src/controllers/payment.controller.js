@@ -141,17 +141,9 @@ const verifyPaymentController = async (req, res) => {
       });
     }
 
-    // Update product payment status if product_id is provided (single product purchase)
-    if (product_id) {
-      await ProductModel.findByIdAndUpdate(
-        product_id,
-        {
-          payment_status: "success",
-          razorpay_order_id,
-        },
-        { new: true }
-      );
-    } else {
+    // For single product purchase, no global status set (products are not globally purchased)
+    // For cart checkout, clear the user's cart
+    if (!product_id) {
       // Clear user's cart after successful payment (cart checkout)
       await CartModel.findOneAndUpdate(
         { user_id },
