@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isFavoriting, setIsFavoriting] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
-  const [isPurchased, setIsPurchased] = useState(product?.payment_status === "success");
+  const [isPurchased, setIsPurchased] = useState(false);
   const [razorpayReady, setRazorpayReady] = useState(false);
 
   const productId = product?._id ?? product?.id;
