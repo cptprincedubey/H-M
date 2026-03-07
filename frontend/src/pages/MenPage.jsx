@@ -41,6 +41,7 @@ const MenPage = () => {
         if (mounted) {
           setError("Failed to fetch products");
           setProducts([]);
+          console.error("Error fetching products:", err);
         }
       } finally {
         if (mounted) setIsPending(false);
