@@ -291,7 +291,13 @@ SKIP_EMAIL_VERIFY=true        # set if your host blocks SMTP verify request
 
 # image storage
 # the backend now depends on "@imagekit/nodejs" instead of the deprecated
-# "imagekit" package; run `yarn add @imagekit/nodejs` when installing.
+# "imagekit" package.  To upgrade in an existing clone run one of the
+# following in the backend folder:
+#
+#   npm uninstall imagekit && npm install @imagekit/nodejs
+#   yarn remove imagekit && yarn add @imagekit/nodejs
+#
+# you can ignore the deprecation warning once the old package is removed.
 IMAGEKIT_PUBLIC_KEY=
 IMAGEKIT_PRIVATE_KEY=
 IMAGEKIT_URL=
