@@ -229,14 +229,28 @@ The application is **production-ready**:
 
 ## 📝 Quick Start
 
+### Package manager
+
+This repo ships with a `yarn.lock` file, but you may use **either npm or
+Yarn**.  The important thing is to stick to one tool – do *not* mix them.  If
+you run `yarn`, delete any `package-lock.json` files; if you use `npm`, delete
+`yarn.lock`.
+
 ### Development
 
 **Backend:**
 ```bash
 cd backend
-npm install
+# install dependencies (choose one manager – npm or yarn)
+# npm:
+#   npm install
+# yarn:
+#   yarn install
 # Create .env file with EMAIL_USER, EMAIL_PASS, mongo_uri, etc.
-npm start
+# npm:
+#   npm start
+# yarn:
+#   yarn start
 ```
 
 **Frontend:**
@@ -270,6 +284,18 @@ JWT_SECRET=<random_secret>
 JWT_SELLER_SECRET=<random_secret>
 EMAIL_USER=<gmail@gmail.com>
 EMAIL_PASS=<16-char-app-password>
+# optional variables for email stability
+EMAIL_SERVICE=gmail            # or "sendgrid"
+EMAIL_TIMEOUT=30000           # milliseconds to wait for SMTP connection
+SKIP_EMAIL_VERIFY=true        # set if your host blocks SMTP verify request
+
+# image storage
+# the backend now depends on "@imagekit/nodejs" instead of the deprecated
+# "imagekit" package; run `yarn add @imagekit/nodejs` when installing.
+IMAGEKIT_PUBLIC_KEY=
+IMAGEKIT_PRIVATE_KEY=
+IMAGEKIT_URL=
+
 RAZORPAY_KEY_ID=<your_key>
 RAZORPAY_KEY_SECRET=<your_secret>
 FRONTEND_URL=http://localhost:5173,https://yourdomain.com

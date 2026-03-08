@@ -1,4 +1,5 @@
-const Imagekit = require("imagekit");
+// use the official maintained package; older `imagekit` branch is deprecated
+const Imagekit = require("@imagekit/nodejs");
 const fs = require("fs");
 const path = require("path");
 
