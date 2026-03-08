@@ -2,13 +2,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 // Fallback backend URL if env var is not set
-const DEFAULT_BACKEND_URL = "https://h-m-vcs4.onrender.com";
+// default to empty string so that `baseURL` becomes "/api" (same origin)
+const DEFAULT_BACKEND_URL = "";
 
 // trim whitespace and remove trailing slashes
-const backendUrl = (import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL).
-  toString()
+let backendUrl = (import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL)
+  .toString()
   .trim()
   .replace(/\/+$/g, "");
+
+// if the value looks like a full URL but fetch fails quickly, warn
+if (import.meta.env.DEV) {
+  console.log("Backend URL configured:", backendUrl || "(same origin)");
+}
 
 if (import.meta.env.DEV) {
   console.log("Backend URL configured:", backendUrl);
@@ -16,8 +22,10 @@ if (import.meta.env.DEV) {
 
 export const axiosInstance = axios.create({
   // Ensure the backend url doesn't end with a slash so we don't end up with
-  // `https://example.com//api` which can result in 404s on some hosts.
-  baseURL: backendUrl + "/api",
+  // `https://example.com//api`.  if backendUrl is empty the request goes to
+  // `/api` on the current origin, which is ideal when front+back deploy
+  // together on the same domain.
+  baseURL: (backendUrl ? backendUrl : "") + "/api",
   timeout: 15000,
   withCredentials: true,
 });
@@ -44,6 +52,15 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// for development we can optionally ping the health endpoint once so
+// that the console shows a connection failure early (helps catch mis-set
+// VITE_BACKEND_URL values during local testing).
+if (import.meta.env.DEV && backendUrl) {
+  axios.get(backendUrl + "/api/health").catch(err => {
+    console.warn("Warning: unable to reach backend at", backendUrl, err.message);
+  });
+}
 
 // Response interceptor
 let networkErrorShown = false;

@@ -254,6 +254,11 @@ npm run build
 # Outputs to dist/ folder
 ```
 
+> **Note:** during both local development and on Vercel you can override the
+> backend address with the `VITE_BACKEND_URL` environment variable. If it is
+> unset the frontend will call `/api` on whatever origin is serving the page,
+> which is ideal when front‑end and API share the same host.
+
 ---
 
 ## 📞 Environment Variables Needed

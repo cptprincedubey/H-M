@@ -17,13 +17,15 @@ const fs = require("fs");
 
 const app = express();
 // allow origins to be configured via environment so the app works both
-// locally and when deployed.  Render will set FRONTEND_URL (or you can add
-// the URL yourself) and we keep the localhost versions for development.
-// Support multiple frontend URLs: production + development
+// locally and when deployed.  FRONTEND_URL can contain a comma-separated
+// list of allowed origins.  we also include the standard local dev ports by
+// default – this keeps the example working without extra configuration.
 const allowedOrigins = [
   ...((process.env.FRONTEND_URL || "").split(",").map((url) => url.trim())),
-  "https://h-m-611n.vercel.app/",
   "https://h-m-611n.vercel.app",
+  "https://h-m-611n.vercel.app/",
+  "http://localhost:5173",
+  "http://localhost:5174",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
 ].filter(Boolean);
